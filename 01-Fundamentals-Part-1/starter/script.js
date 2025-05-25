@@ -189,3 +189,28 @@ if(number==20){ // Here coercion is performed by the JS.
 if ( aage === 18 ) console.log("yay you are eligable.(strict)") // Change the value of aage if wanna see the change.
 if ( aage == 18 ) console.log("yay you are eligable.(loose)")
 //
+
+/*
+//const favourite = prompt("whats your fav number?");
+const favourite = Number(prompt("whats your fav number?"));
+console.log(favourite);
+console.log(typeof favourite); //the inputted value will be in string only.
+//
+if(favourite == 23){ // this is loose one which will convert the string to the number and compare it to the number 23.
+    console.log("Cool! 23 is an amazing number")
+}
+//
+if(favourite === 23){ // this will check if the value is same as the 23 number strictly.
+    console.log("Very good! 23 is an amazing number")
+} else if(favourite === 7){
+    console.log("you are again right!")
+}else if(favourite === 9){
+    console.log("Wow 9 is also a great number.")
+}else{
+    console.log("number is not 23, 9 or 7")
+}
+//
+// if(favourite != 23){} // loose version.
+if( favourite !== 23) console.log("why not 23?????");
+*/
+//
