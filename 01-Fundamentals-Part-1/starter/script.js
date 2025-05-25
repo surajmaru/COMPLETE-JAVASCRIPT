@@ -214,3 +214,4 @@ if(favourite === 23){ // this will check if the value is same as the 23 number s
 if( favourite !== 23) console.log("why not 23?????");
 */
 //
+// Boolean logic.
