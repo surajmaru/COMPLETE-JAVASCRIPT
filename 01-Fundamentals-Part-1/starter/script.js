@@ -215,3 +215,94 @@ if( favourite !== 23) console.log("why not 23?????");
 */
 //
 // Boolean logic.
+const hasLicense = true;
+//const hasVision = true;
+const hasVision = true;
+console.log(hasLicense && hasVision);
+console.log(hasLicense || hasVision);
+console.log(!hasLicense);
+//
+const shouldDrive = hasLicense && hasVision;
+if(shouldDrive){
+    console.log("she is able to drive")
+} else{
+    console.log("someone else should drive")
+}
+//
+const isTired = true;
+console.log(hasLicense || hasVision || isTired);
+//
+if(shouldDrive && !isTired){
+    console.log("she is able to drive")
+} else{
+    console.log("someone else should drive")
+}
+//
+//switch statement.
+ const day = "monday";
+switch(day) {
+    case "monday":
+        console.log("do gym");
+        break; // putting "break" after each work done is very important in switch statement.
+    case "tuesday":
+        console.log("do something");
+        break;
+    case "wednesday":
+    case "thursday":
+        console.log("write code");
+        break;
+    case "friday":
+        console.log("record videos");
+        break;
+    case "saturday":
+    case "sunday":
+        console.log("enjoy weekend");
+        break;
+    default:
+        console.log("not a valid day");
+}
+//if else alternative for the baove code.
+const dayy = "friday";
+if(dayy === "monday"){
+    console.log("go to the gym");
+}else if(dayy === "tuesday"){
+    console.log("eat protien");
+}else if(dayy === "wednesday"){
+    console.log("eat food");
+}else if(dayy === "thursday"){
+    console.log("sleep");
+}else if(dayy === "friday"){
+    console.log("study");
+}else if(dayy === "saturday" || dayy === "sunday"){
+    console.log("enjoy weekend");
+}else{
+    console.log("not a valid day");
+}
+//
+//conditional/ternary operator.
+const agge = 23;
+agge>=18 ? console.log("i like to drink") : console.log("i am under aged");
+//
+const drink = agge >= 18 ? "wine" : "water";
+console.log(drink);
+//
+let drink2;
+if(agge>=18){
+    drink2 = "wine";
+}else{
+    drink2 = "water";
+}
+console.log(drink2);
+//
+console.log(`i like to drink ${agge >= 18 ? "wine" : "water"}`);
+// the point here is that we cannot use the "if statement" in this backticks,
+// but in replacement of that we can use the ternary operator in it.
+// so its very useful and the work can be done in replacement of if statement.
+//
+const bill = 275;
+let tip = bill*0.15;
+let tip2 = bill*0.2;
+let amount;
+const total = bill<=300 ? amount = bill+tip : amount=bill+tip2;
+console.log(`The bill is ${bill}, the tip is ${bill<=300?tip:tip2} and the total is ${amount}.`);
+//
