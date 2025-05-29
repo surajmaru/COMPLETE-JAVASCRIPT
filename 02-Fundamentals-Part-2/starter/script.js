@@ -102,6 +102,40 @@ const ret = function (byear,name){
 }
 console.log(ret(2000,"suraj"));
 console.log(ret(1970,"ansh"));
+
+//
+console.log("")
 //
 
- 
+let calcAverage = (s1,s2,s3) => {
+
+    const avg = (s1+s2+s3)/3;
+    return avg;
+}
+
+//1st test
+let scoreDolphins = calcAverage(44,23,71);
+let scoreKoalas = calcAverage(65,54,49);
+console.log(`dolphins score average ${scoreDolphins}`);
+console.log(`koalas score average ${scoreKoalas}`);
+
+
+function checkWinner (d,k){
+
+    if(d>= 2*k){
+        console.log(`dolphin wins (${d} vs ${k})`)
+    }else if(k>= 2*d){
+            console.log(`koalas wins (${d} vs ${k})`)
+        
+    }else {
+        console.log("no team wins...")
+    }
+}
+checkWinner(scoreDolphins,scoreKoalas);
+console.log("")
+//2nd test
+scoreDolphins = calcAverage(85,54,41);
+scoreKoalas = calcAverage(23,34,27);
+console.log(`dolphins 2nd score average ${scoreDolphins}`);
+console.log(`koalas 2nd score average ${scoreKoalas}`);
+checkWinner(scoreDolphins,scoreKoalas)
