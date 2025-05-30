@@ -139,3 +139,115 @@ scoreKoalas = calcAverage(23,34,27);
 console.log(`dolphins 2nd score average ${scoreDolphins}`);
 console.log(`koalas 2nd score average ${scoreKoalas}`);
 checkWinner(scoreDolphins,scoreKoalas)
+//
+
+//arrays
+const friend1 = "suraj";
+const friend2 = "steve";
+const friend3 = "bob";
+
+const friends = ["suraj","steve","bob"];
+console.log(friends);
+
+const years = new Array(1991,1233,5345,2020);// Another method to define array.
+
+console.log(friends[0]);
+console.log(friends[2]);
+
+console.log(friends.length);
+console.log(friends[friends.length-1]);// To always get the last element in an array.
+
+friends[2] = "jay";
+console.log(friends);
+
+const suraj = ["suraj","maru", 2025-2005, "student", friends];
+console.log(suraj);
+console.log(suraj.length);
+
+//
+
+const ccalAge = function(bYear){
+    return 2025-bYear;
+}
+const yearss = [1990,2000,2003,2005,2010,1999]; 
+
+const aaggee = ccalAge(yearss[0]);
+const aaggee2 = ccalAge(yearss[1]);
+const aaggee3 = ccalAge(yearss[years.length-1]);
+
+console.log(aaggee,aaggee2,aaggee3);
+//
+
+const aages = [ccalAge(yearss[0]),ccalAge(yearss[1]),ccalAge(yearss[years.length-1])];
+console.log(aages);
+//
+
+//array methods.
+
+const f = ["suraj","jay","ansh"];
+const newLength = f.push("yash");
+console.log(f);
+console.log(newLength);
+// add in front
+f.unshift("john");
+console.log(f);
+// delete from behind
+f.pop()
+const popped = f.pop()
+console.log(f);
+console.log(popped);
+//delete from start
+const added = f.shift();
+console.log(f);
+console.log(added);
+//
+console.log(f.indexOf('jay'));
+console.log(f.indexOf('no-one'));
+//
+f.push(23);
+console.log(f.includes("suraj"));
+console.log(f.includes("bob"));
+console.log(f.includes(23))
+console.log(f.includes("23"));
+// 23 number is diffrent and "23" string is diffrent.
+// it checks exactly and does not perform coercion.
+//
+if(f.includes("peter")){
+console.log("you have a frnd called peter");
+} else {
+    console.log("you dont have a friend");
+}
+//
+
+const v1 = [125,555,44];
+let tip;
+let totaltip;
+// let v1 = bills[1];
+
+
+
+    function calcTip (v1){
+    if(v1<=300 && v1>=50){
+        tip = v1*0.15;
+        totaltip = v1+tip;
+        console.log(totaltip);
+    }else if(v1>300){
+        tip = v1*0.2;
+        totaltip = v1+tip;
+        console.log(totaltip);
+
+    }else if(v1<50){
+        tip = v1*0.2;
+        totaltip = v1+tip;
+        console.log(totaltip);
+
+
+
+    }
+}
+
+calcTip();
+const tips = [calcTip(v1[0]),calcTip(v1[1]),calcTip(v1[2])];
+
+//
+
