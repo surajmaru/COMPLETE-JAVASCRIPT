@@ -11,7 +11,7 @@ Then go to "Editor: format on save" and just check the box.
 Then you are all set.
 And you can also create a ".prettierrc" file to config the prettier.
 
---NEXT--
+--NEXT-- BREAK
 
 We configured our snippits in vs code.
 We went in preferences then configure snippits.
@@ -43,3 +43,51 @@ EXAMPLE SNIPPIT CODE:-
 	}
 }
 "
+
+NEXTPART
+
+
+Then we used the extension called "todo highlight".
+this is the use of it:- BUG, COMPLETED,FIXME,NEXTPART,and we can make much more.
+We just have to go to the settings then click on the top right button which says "open settings in json", and in that we can make changes to all of it like shown below:-
+
+
+This is the code to configure the "TODO HIGHLIGHT".
+"
+{
+  "workbench.colorTheme": "Tomorrow Night Blue",
+  "workbench.startupEditor": "none",
+  "files.autoSave": "onFocusChange",
+
+  "todohighlight.isCaseSensitive": true,
+  "todohighlight.keywords": [
+
+    
+     {
+      "text": "NEXTPART",
+      "color": "#333",
+      "backgroundColor": "#3498db"
+    },
+     {
+      "text": "FIXME",
+      "color": "#333",
+      "backgroundColor": "#e67e22"
+    },
+    {
+      "text": "BUG",
+      "color": "#333",
+      "backgroundColor": "red"
+    },
+    {
+      "text": "COMPLETED",
+      "color": "#333",
+      "backgroundColor": "green"
+    },
+     
+
+  ]
+}
+
+
+"
+BREAK
