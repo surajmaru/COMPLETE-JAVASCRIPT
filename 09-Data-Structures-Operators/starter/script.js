@@ -56,8 +56,15 @@ const restaurant = {
 
   orderPasta: function (ing1,ing2,ing3){
     console.log(`Here is your pasta with ${ing1}, ${ing2} and ${ing3}`);
+  },
+
+  orderPizza: function(mainIng, ...otherIng){
+    console.log(mainIng,otherIng);
   }
 };
+
+
+
 // BREAK
 // const ing = [prompt("lets make pasta! ingredient 1?"), prompt("lets make pasta! ingredient 2?"), prompt("lets make pasta! ingredient 3?")];
 // console.log(ing);
@@ -188,3 +195,183 @@ restaurantCopy2.name = "my place";
 console.log(restaurant.name);
 console.log(restaurantCopy2.name);
 
+//
+
+// rest pattern and parameter.
+const arr54 = [1,2,...[4,5,6]]; //spread operator, used on right side.
+
+const arr45 = [1,2,3,4,5];
+const [v,n, ...others] = arr45; // rest operator, used on left side.
+console.log(v,n,others);
+//destructuring assignment.
+const [pizza, ,Risotto, ...otherFood] = [...restaurant.mainMenu, ...restaurant.starterMenu];
+console.log(pizza,Risotto,otherFood);
+
+//in objects destructuring assignment.
+const {sat, ...weekDays} = restaurant.openingHours;
+console.log(sat,weekDays);
+
+//in functions.
+const add = function(...numbers){// rest parameter. //packed.
+  let sum = 0;
+  for (let i=0; i < numbers.length; i++){
+    sum += numbers[i];
+  }
+console.log(sum);
+}
+add(2,3);
+add(5,3,7,2);
+add(2,5,6,3,7,3);
+
+const xx  =[23,5,7];
+add(...xx); //spread the above array in here as argument. //unpacked.
+
+restaurant.orderPizza("mushroom", "onion", "potato", "tomato");
+//
+//BREAK
+
+// logical operators can use any datatypes, return any datatype, short-circuiting.
+console.log("---OR---");
+console.log(3 || "suraj"); //first is already truthy → stops there.
+console.log("" || "suraj"); // "suraj" because "" is falsy, so prints truthy. stops there
+console.log(true || 0); //"true" prints truthy value. stops there
+console.log(undefined || null); // both falsy → returns last.
+
+console.log(undefined || 0 || "" || "hello" || 23 || null); // "hello" is the first truthy value here so prints it and stops.
+
+restaurant.numGuests = 23;
+const guests1 =  restaurant.numGuests ? restaurant.numGuests : 10;
+console.log(guests1);
+
+const guest2 = restaurant.numGuests || 10;
+console.log(guest2);
+
+console.log("---AND---");
+console.log(0 && "suraj"); //short-circuits → stops at first falsy
+console.log(7 && "suraj"); //both are truthy → returns last value
+console.log("hello" && 23 && null && "suraj"); //finds faulsy, whole becomes false and returns the faulsy value.
+
+if (restaurant.orderPizza){
+  restaurant.orderPizza("mushroom","butter");
+};
+
+restaurant.orderPizza && restaurant.orderPizza("mushroom","butter");
+
+//the nullish coalescing operator (??)
+//?? checks only for null or undefined (not 0, not "", not false).
+restaurant.numGuests = 0; 
+const guest3 = restaurant.numGuests || 10; //|| checks for any falsy value (false, 0, "", null, undefined, NaN).
+const guest4 = restaurant.numGuests ?? 10; //?? checks only for null or undefined (not 0, not "", not false).
+console.log(guest3);
+console.log(guest4);
+
+//new Logical Assignment Operators introduced in es2021.
+
+const res1 = {
+  name: "suraj",
+  // numG: 20,
+  numG: 0,
+};
+
+const res2 = {
+  name: "bob",
+  owner: "bobby",
+};
+console.log("---OR Assignment Operator---");
+// res1.numG = res1.numG || 10; //old method/operator
+// res2.numG = res1.numG || 10;
+
+// res1.numG ||= 10;// new operator.
+// res2.numG ||= 10;
+console.log("---Nullish Assignment Operator---");//null or undefined.
+res1.numG ??= 10;//here this operator works. numG: 0, (for this condition).
+res2.numG ??= 10;
+
+console.log(res1);
+console.log(res2);
+
+const rep = res2.numG = res1.numG || 10;
+console.log(rep);
+
+console.log("---AND Assignment Operator---");
+// res2.owner = res2.owner && "<ANONYMOUS>";
+res1.owner &&= "<ANONYMOUS>";
+res2.owner &&= "<ANONYMOUS>";
+console.log(res2);
+console.log(res1);
+//
+console.log("---CHALLENGE---");
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
+
+const [player1,player2] = game.players;
+const [gk, ...fieldPlayers] = player1;
+const allPlayers = [...player1,...player2];
+const playerFinal = [...player1,'Thiago', 'Coutinho', 'Perisic'];
+const {team1,x: draw,team2 } = game.odds;
+
+
+function printGoals(...pl){
+  console.log(`${pl.length} goals were scored`);
+  // for(const player of pl){
+  //   console.log(player);
+  // }
+  console.log(...pl);
+}
+
+printGoals( 'Davies', 'Muller', 'Lewandowski','Kimmich');
+printGoals(...game.scored);
+
+team1 < team2 && console.log('Team 1 is more likely to win');
+team2 < team1 && console.log('Team 2 is more likely to win');
+console.log("---CHALLENGE COMPLETE--");
+//
+
+//The for-of Loop
+console.log("---The for-of Loop---");
+
+const menu2 = [...restaurant.starterMenu, ...restaurant.mainMenu];
+
+for (const item of menu2) console.log(item);
+
+// for(const item of menu2.entries()) console.log(`${item[0]+1}: ${item[1]}`, item); // old way.
+
+for(const [i,el] of menu2.entries()) console.log(`${i+1}: ${el}`, [i,el]); // better way.
