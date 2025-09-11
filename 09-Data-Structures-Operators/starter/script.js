@@ -22,6 +22,24 @@ const mexicanFoods = new Set([
   'garlic',
 ]);
 
+
+const weekD = ["mon","tue","wed","thu","fri","sat","sun"];
+const openingHour = {
+    [weekD[0]]: {
+      open: 12,
+      close: 22,
+    },
+    [weekD[1]]: {
+      open: 11,
+      close: 23,
+    },
+    [weekD[5]]: {
+      open: 0, // Open 24 hours
+      close: 24,
+    },
+  };
+
+
 // Data needed for first part of the section
 const restaurant = {
   name: 'Classico Italiano',
@@ -30,6 +48,7 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
+  // openingHours,
   openingHours: {
     thu: {
       open: 12,
@@ -45,7 +64,8 @@ const restaurant = {
     },
   },
 
-  order: function(starterIndex,mainIndex){
+  // order: function(starterIndex,mainIndex){ //old technique.
+  order(starterIndex,mainIndex){ // new another way.
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
 
@@ -375,3 +395,115 @@ for (const item of menu2) console.log(item);
 // for(const item of menu2.entries()) console.log(`${item[0]+1}: ${item[1]}`, item); // old way.
 
 for(const [i,el] of menu2.entries()) console.log(`${i+1}: ${el}`, [i,el]); // better way.
+
+//Enhanced Object Literals
+console.log("---Enhanced Object Literals---");
+//go above
+
+//Optional Chaining (?.)
+console.log("---Optional Chaining (?.)---");
+
+//old method.
+if(restaurant.openingHours.mon){
+console.log(restaurant.openingHours.mon.open);
+};
+
+// console.log(restaurant.openingHours.mon.open);
+
+// with optional chaining.
+console.log(restaurant.openingHours.mon?.open); // "if monday exists then go to "open" and console.log it, and if not then then just return undefined".
+console.log(restaurant.openingHours?.fri?.open);
+
+// if(restaurant.openingHours.fri){
+// console.log(restaurant.openingHours.fri.open);
+// }
+
+const days = ["mon","tue","wed","thu","fri","sat","sun"];
+for (const day of days){
+  // console.log(day);
+  // const open =restaurant.openingHours[day]?.open || "closed"; //this was not suitable for "sat" in the object so we used the nullish operator.
+  const open =restaurant.openingHours[day]?.open ?? "closed"; // here it will go to closed if open doesnot exist in some days then "restaurant.openingHours[day]?.open" will become FALSE then the OR operator will go to the opther condition on the right side and it will use that instead of this "restaurant.openingHours[day]?.open". 
+  console.log(`on ${day}, we open at ${open}`);
+} //this is a good example to understand the optional chaining.
+
+//Methods. 
+console.log(restaurant.order?.(0,1) ?? "method does not exists");
+console.log(restaurant.menu?.(0,1) ?? "method does not exists");
+
+//arrays.
+const users = [
+  {
+    name:"suraj",
+    email:"hello@gmail.com",
+  }
+];
+console.log(users[0]?.name ?? "user arrray empty");
+
+//
+// Looping Objects: Object Keys, Values, and Entries
+console.log("--- Looping Objects: Object Keys, Values, and Entries---");
+
+//Property name/key.
+const props = Object.keys(openingHours);
+console.log(props);
+console.log(`we are open on ${props.length} days`);
+
+for (const day of props){
+  console.log(day);
+}
+
+let strL = `we are open on ${props.length} days`;
+for (const day of props){
+  strL+= ` ${day},`;
+}
+console.log(strL);
+
+//Property values.
+const values = Object.values(openingHours);
+console.log(values);
+
+for(const day of values){
+  console.log(day);
+}
+
+//Property entries.
+const value2 = Object.entries(openingHours);
+console.log(value2);
+
+for(const [key, {open, close}] of value2){ //destructuring here.
+  console.log(`on ${key} we open at ${open} and close at ${close}`);
+}
+//
+
+console.log("---challenge 2---");
+
+const game3 = Object.entries(game.scored);
+
+for(const [index,player] of game3){
+  console.log(`${player} has ${Number(index)+1} goals`);
+};
+
+let oddd = 0;
+const odds = Object.values(game.odds);
+for(const odd of odds){
+  oddd += odd;
+}
+
+oddd /= odds.length
+console.log(oddd);
+
+for (const [team, odd] of Object.entries(game.odds)) {
+  const teamStr = team === 'x' ? 'draw' : `victory ${game[team]}`;
+  console.log(`Odd of ${teamStr}: ${odd}`);
+}
+
+const scores = {};
+
+for(const player of game.scored){
+  scores[player] = scores[player] ? scores[player] + 1 : 1;
+  console.log(scores);
+}
+console.log(scores);
+console.log("---challenge complete---");
+//
+
