@@ -4,24 +4,6 @@
 const flights =
   '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
 
-const italianFoods = new Set([
-  'pasta',
-  'gnocchi',
-  'tomatoes',
-  'olive oil',
-  'garlic',
-  'basil',
-]);
-
-const mexicanFoods = new Set([
-  'tortillas',
-  'beans',
-  'rice',
-  'tomatoes',
-  'avocado',
-  'garlic',
-]);
-
 
 const weekD = ["mon","tue","wed","thu","fri","sat","sun"];
 const openingHour = {
@@ -507,3 +489,222 @@ console.log(scores);
 console.log("---challenge complete---");
 //
 
+console.log("---SETS---");
+
+const ordersSet = new Set(["pasta","pizza","pizza","burger","pasta","burger"]);
+console.log(ordersSet);
+
+console.log(new Set("suraj"));
+console.log(new Set());
+
+console.log(ordersSet.size);
+console.log(ordersSet.has("pizza"));
+console.log(ordersSet.has("bread"));
+
+ordersSet.add("frankie");
+ordersSet.add("frankie");
+ordersSet.delete("burger");
+// ordersSet.clear();
+console.log(ordersSet);
+
+for(const order of ordersSet){
+  console.log(order);
+};
+
+//example 
+const staff = ["waiter","chef", "waiter","manager","chef", "waiter"];
+// const staffUnique = new Set(staff);
+const staffUnique = [...new Set(staff)];
+console.log(staffUnique);
+console.log(new Set(staff).size);
+
+console.log(new Set("suraj").size);
+
+//New Operations to Make Sets Useful
+console.log("---New Operations to Make Sets Useful---");
+
+const italianFoods = new Set([
+  'pasta',
+  'gnocchi',
+  'tomatoes',
+  'olive oil',
+  'garlic',
+  'basil',
+]);
+
+const mexicanFoods = new Set([
+  'tortillas',
+  'beans',
+  'rice',
+  'tomatoes',
+  'avocado',
+  'garlic',
+]);
+
+//1. intersection method
+const commonF = italianFoods.intersection(mexicanFoods);
+console.log("intersection:", commonF);
+console.log("intersection:",[...commonF]);
+
+//2. union method
+const imMix = italianFoods.union(mexicanFoods);
+console.log("union:",imMix );
+
+console.log("Completer together:" , [...italianFoods,...mexicanFoods]);
+console.log("set converted:" , new Set([...italianFoods,...mexicanFoods]));
+console.log("array converted:" , [...new Set([...italianFoods,...mexicanFoods])]);
+
+//3. difference method
+const diff = italianFoods.difference(mexicanFoods);
+const diff2 = mexicanFoods.difference(italianFoods);
+console.log(diff);
+console.log(diff2);
+
+//4. symmetricDifference method
+const syDiff = italianFoods.symmetricDifference(mexicanFoods);
+console.log(syDiff);
+
+//5. isSubsetOf method
+
+const newSet = new Set([1,2]);
+const newSet2 = new Set([1,2,3,4,5,6]);
+const subset1 = newSet.isSubsetOf(newSet2);
+console.log(subset1);
+
+const subset = italianFoods.isSubsetOf(mexicanFoods);
+console.log(subset);
+
+const subset2 = mexicanFoods.isSubsetOf(italianFoods);
+console.log(subset2);
+
+//6. isSupersetOf method
+const superset = newSet2.isSupersetOf(newSet);
+console.log(superset);
+
+//7. isDisjointFrom method
+const newset4 = new Set([1,2,3]);
+const newset5 = new Set([4,5,6]);
+const desset = newset4.isDisjointFrom(newset5);
+console.log(desset);
+
+//
+
+//Maps.
+console.log("---Maps---");
+
+const rest = new Map();
+rest.set("name", "classical");
+rest.set(1,"france");
+rest.set(2,"portugal");
+console.log(rest);
+
+rest.set("catagories", ['Italian', 'Pizzeria', 'Vegetarian', 'Organic']).set("open", 11).set("close", 23).set(true,"we are open").set(false,"we are closed");
+
+rest.get('name')
+
+console.log(rest.get('name'));
+console.log(rest.get(true));
+console.log(rest.get(1));
+
+const time = 21;
+const timeDaily = rest.get(time > rest.get("open") && time < rest.get("close"));
+console.log(timeDaily);
+
+console.log(rest.has("catagories"));
+rest.delete(2);
+
+console.log(rest);
+console.log(rest.size);
+
+// rest.clear();
+// console.log(rest);
+const arrr = [1,2];
+rest.set(arrr, "test")
+// rest.set([1,2], "test"); // this wont work here thats why we use the other method.
+// console.log(rest.get([1,2]));
+console.log(rest.get(arrr)); 
+
+rest.set(document.querySelector("h1"), "heading");
+console.log(rest);
+
+//Maps iteration.
+console.log("---Maps iteration---");
+
+const question = new Map([
+  ["question", "whats the best programming language in the world?"],
+  [1, "c"],
+  [2,"java"],
+  [3,"javaScript"],
+  ["correct", 3],
+  [true, "Correct"],
+  [false, "incorrect"]
+]);
+console.log(question);
+
+//convert obj ot map.
+console.log(Object.entries(openingHours));
+const hourMap = new Map(Object.entries(openingHours));
+console.log(hourMap);
+
+console.log("---Quizz game---");
+//quizz
+console.log(question.get("question"));
+for(const [key,value] of question){
+  if(typeof key === "number"){
+    console.log(`Answer ${key}: ${value}`);
+  }
+};
+// const answer = Number(prompt("your answer"));
+// console.log(answer);
+// console.log(question.get(question.get("correct") === answer));
+// console.log(question.get(answer === 3)); //another way of doing the same.
+console.log("---Game over---");
+
+//convert map to array.
+console.log([...question]);
+//
+console.log(question.entries());
+console.log(question.keys());
+console.log(question.values());
+//
+console.log([...question.entries()]);
+console.log([...question.keys()]);
+console.log([...question.values()]);
+//
+
+console.log("---Challenge 3---");
+
+const gameEvents = new Map([
+  [17, '⚽️ GOAL'],
+  [36, '🔁 Substitution'],
+  [47, '⚽️ GOAL'],
+  [61, '🔁 Substitution'],
+  [64, '🔶 Yellow card'],
+  [69, '🔴 Red card'],
+  [70, '🔁 Substitution'],
+  [72, '🔁 Substitution'],
+  [76, '⚽️ GOAL'],
+  [80, '⚽️ GOAL'],
+  [92, '🔶 Yellow card'],
+]);
+
+const newArr5 = [...new Set(gameEvents.values())];
+gameEvents.delete(64);
+
+console.log(newArr5);
+
+console.log(`An event happened on average every ${90/ gameEvents.size} minutes.`);
+
+const arr7 = [...gameEvents.keys()].pop();
+// console.log(arr7);
+console.log(`An event happened, on average, every ${arr7 / gameEvents.size} minutes`);
+
+for(const [minute,event] of gameEvents){
+  const half = minute <= 45 ? "FIRST" : "SECOND"
+    console.log(`[${half} HALF] ${minute}: ${event}`);
+  }
+
+  console.log("---Challenge complete---");
+  //
+
+  
