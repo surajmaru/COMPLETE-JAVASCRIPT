@@ -707,4 +707,169 @@ for(const [minute,event] of gameEvents){
   console.log("---Challenge complete---");
   //
 
+  //working with strings
+  console.log("---Working with strings---");
+
+  const airline = "Indian airliner";
+  const plane = "A320";
+
+  console.log(plane[0]);
+  console.log(plane[1]);
+  console.log(plane[2]);
+  console.log("B737"[0]);
+
+  console.log(airline.length);
+  console.log("B737".length);
+
+  console.log(airline.indexOf("r"));
+  console.log(airline.lastIndexOf("r"));
+  console.log(airline.indexOf("Indian"));
+
+  console.log(airline.slice(4));
+  console.log(airline.slice(4,8));
+
+  console.log(airline.slice(0, airline.indexOf(" ")));
+  console.log(airline.slice(airline.lastIndexOf(" ")+1));  
+  console.log(airline.slice(airline.lastIndexOf("a")));
+
+  console.log(airline.slice(-2));
+  console.log(airline.slice(1, -2));
+
+  const checkMS = function(seat){
+    // B and E are middle seats.
+    const s = seat.slice(-1);
+    if(s === "B" || s === "E")
+      console.log("you got the middle seat");
+    else
+      console.log("you got lucky");
+    
+  }
+  checkMS("11B");
+  checkMS("23C");
+  checkMS("3E");
+
+  console.log(new String("hello"));
+  console.log(typeof new String("hello"));
+  console.log(new String("hello").toUpperCase());
+  console.log(typeof new String("hello").slice(1));
+
+  //
+
+  console.log(airline.toLowerCase());
+  console.log(airline.toUpperCase());
+  
+  //Fix capitalization in name.
+  const passenger = "SUraj"; //Suraj.
+  const passengerLower = passenger.toLowerCase();
+  const passengerCorrect = passengerLower[0].toUpperCase() + passengerLower.slice(1);
+  console.log(passengerCorrect);
+
+  const correctName = function(name){
+  const passengerLower = name.toLowerCase();
+  const passengerCorrect = passengerLower[0].toUpperCase() + passengerLower.slice(1);
+  console.log(passengerCorrect);
+  };
+  correctName("JAck"); 
+
+  //comparing email.
+  const email = "hello@gmail.com";
+  const loginEmail = "  Hello@gmaIL.Com \n";
+  const lowerEmail = loginEmail.toLowerCase();
+  const trimmedEmail = lowerEmail.trim();
+  console.log(trimmedEmail);
+
+  const  normalEmail = loginEmail.toLowerCase().trim();//easy way.
+  console.log(normalEmail);
+  console.log(email === normalEmail);
+
+  // replacing.
+  const priceGB = "288,97£";
+  const priceUS = priceGB.replace("£", "$").replace(",",".");
+  console.log(priceUS);
+
+  const announcement = "all passenger come to boarding door 23. Boarding door 23!";
+  console.log(announcement.replace("door","gate"));  //this will only change the first occurence of that word not to all of them.
+  console.log(announcement.replaceAll("door","gate")); //this will change to all.
+
+  console.log(announcement.replace(/door/g,"gate")); //without the replace method. "g" here stands for global.
+  
+  //Booleans.
+  const plane2 = "Airbus A320neo";
+  console.log(plane2.includes("A320"));
+  console.log(plane2.includes("boeing"));
+  console.log(plane2.startsWith("A")); //case sensitive.
+  console.log(plane2.startsWith("Airn"));
+
+  if(plane2.startsWith("Airbus") && plane2.endsWith("neo")){
+    console.log("Part of the new airbus family");
+  }else{
+    console.log("Not a part of the airbus family");
+  }
+
+  //practice exercise.
+  const checkBaggage = function(items){
+    // const baggage = items;
+    const baggage = items.toLowerCase();
+    if(baggage.includes("gun") || baggage.includes("knife"))
+      console.log("You are not allowed on board!");
+    else console.log("Welcome aboard!");
+  }
+  checkBaggage("I have a laptop, some Food and a pocket Knife");
+  checkBaggage("Socks and camera");
+  checkBaggage("Got some snacks and a gun for protection");
+
+  //
+
+  console.log("a+very+nice+string".split("+"));
+  console.log("Suraj maru".split(" "));
+
+  const [firstName, lastName] = "Suraj maru".split(" ");
+  console.log(firstName);
+  console.log(lastName);
+
+  const newName = ["Mr.",firstName, lastName.toUpperCase()].join(" ");
+  console.log(newName);
+
+  //practice example.
+  const capName = function(name){
+    const names = name.split(" ");
+    const namesUpper = [];
+
+    for(const n of names){
+      // namesUpper.push(n[0].toUpperCase() + n.slice(1));
+      namesUpper.push(n.replace(n[0], n[0].toUpperCase())); //easy alternative.
+    }
+    console.log(namesUpper.join(" "));
+  }
+  capName("suraj and bob davis");
+  capName("suraj maru");
+
+  //padding a string.
+  const message2 = "Go to gate 23";
+  console.log(message2.padStart(25,"+").padEnd(35,"+")); //The overall size of the string till the last "3" will be 25 and it will add 10 "+" to the end of the string, and not the overall length of the string is 35.
+  console.log("suraj".padStart(20,"+").padEnd(30,"+"));
+
+  //practice example.
+  const maskCreaditCard = function(number){
+    const str = number + "";
+    const last = str.slice(-4);
+    return last.padStart(str.length, "*");
+  };
+  console.log(maskCreaditCard(2342542525)); 
+  console.log(maskCreaditCard("34534534534"));
+
+  //repeat method.
+  const mess2 = "Bad weather...All departures Delayed... ";
+  console.log(mess2.repeat(5));
+
+  //practice example.
+  const planesInLine = function(n){
+    console.log(`There are ${n} planes in the line ${"✈️".repeat(n)}`);
+  };
+  planesInLine(5);
+  planesInLine(3);
+  planesInLine(12);
+  
+  //
+
   
