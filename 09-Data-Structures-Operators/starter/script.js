@@ -872,5 +872,71 @@ for(const [minute,event] of gameEvents){
   
   //
 
+  //Challenge:-
+  console.log("---CHALLENGE 4---");
+  //test data (pasted to the text area)
+  // underscore_case
+  // first_name
+  // Some_Variable
+  // calculate_AGE
+  // delayed_departure
+
+  //should produce this output, 5 diffrent console.log's
+  // underscoreCase
+  // firstName
+  // someVariable
+  // calculateAge
+  // delayedDeparture
+
+  document.body.append(document.createElement("textarea"));
+  document.body.append(document.createElement("button"));
+
   
+  document.querySelector("button").addEventListener("click", function(){
+    const text = document.querySelector("textarea").value;
+    const rows = text.split("\n");
+
+
+    console.log(rows);
+    
+    for(const [i,row] of rows.entries()){
+      // console.log(i);
+      // const demo = row.toLowerCase().trim().split("_");
+      // console.log(demo);
+      const [first ,second] = row.toLowerCase().trim().split("_");
+      // console.log(first,second);
+      const output = `${first}${second.replace(second[0],second[0].toUpperCase())}`;
+      console.log(`${output.padEnd(20)}${"✅".repeat([i+1])}`);
+    }
+  });
+
+  console.log("---Challenge complete---");
+
+  //
+
+  console.log("---Another side challenge---");
+
+  const fli =
+  '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+
+// 🔴 Delayed Departure from FAO to TXL (11h25)
+//              Arrival from BRU to FAO (11h45)
+//   🔴 Delayed Arrival from HEL to FAO (12h05)
+//            Departure from FAO to LIS (12h30)
+
+// console.log(fli.split("+"));
+
+for(const flight of fli.split("+")){
+  const [type, from,to,time] = flight.split(";");
+  // console.log(type);
+  const output = `${type.startsWith("_Delayed") ? "🔴" : ""}${type.replaceAll("_"," ")} from ${from.slice(0,3).toUpperCase()} to ${to.slice(0,3).toUpperCase()} (${time.replace(":","h")})`.padStart(45);
   
+  console.log(output);
+}
+
+console.log("---over---");
+
+//
+
+console.log("");
+console.log("---LESSON ENDED---");
