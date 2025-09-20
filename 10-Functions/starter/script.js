@@ -171,3 +171,202 @@ const suraj = {
     console.log(swiss);
     //
     books.call(swiss, ...flightData); //this here is the same as the appply() method as shown above.
+
+    //bind method.
+    console.log("---bind method---");
+    //so instead of doing "call()" to change "this" for every other object and again and again so we can just do "bind()" so "this" will be permanently be binded to that object.
+
+    const bookEW = books.bind(eurowings);
+    const bookLH = books.bind(lufthansa);
+    const bookLX = books.bind(swiss);
+
+    bookEW(23,"steven");
+    
+    //fixed argument.
+    const bookEW23 = books.bind(eurowings, 23);
+    bookEW23("jacob");
+
+    //with eventlisteners
+
+    lufthansa.planes = 300;
+    lufthansa.buyPlane = function(){
+        console.log(this);
+        this.planes++;
+        console.log(this.planes);
+    };
+    
+    //in an event handler the "this" keyword always points to the element on which the handler is attached to.
+
+    //in this situation the "this" will point to the button element.
+    document.querySelector(".buy").addEventListener("click",lufthansa.buyPlane);
+
+    //in this with "bind" the "this" will point to the lufthansa object! and thats what we wanted.
+    document.querySelector(".buy").addEventListener("click",lufthansa.buyPlane.bind(lufthansa));
+
+    // partial application.
+    const addTax = (rate,value) => value+value*rate;
+    console.log(addTax(0.1,200));
+
+    const addVAT = addTax.bind(null, 0.23);
+    // addVAT = value => value+value*0.23; // same as.
+    console.log(addVAT(300));
+
+
+    const addTAX2 = function(rate){
+        return function(value){
+            const x = value+value*rate;
+            return x;
+        }
+    };
+
+    const addVAT2 = addTAX2(0.45);
+    console.log(addVAT2(200));
+    console.log(addVAT2(500));
+
+    console.log("---Challenge 1---");
+
+    const poll = {
+        question: 'What is your favourite programming language?',
+        options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+        // This generates [0, 0, 0, 0]. More in the next section 😃
+        answers: new Array(4).fill(0),
+
+        registerNewAnswer(){
+            const prompt2 = prompt(`What is your favourite programming language? \n 0: Javascript \n 1: Python \n 2: rust \n 3: C++ `);
+
+            if(prompt2 >= 0 && prompt2 < this.answers.length){
+            if(prompt2 === 0 || 1 || 2 || 3){
+                this.answers[prompt2] ++;
+            }
+        }else{
+            alert("Enter a number between 0 - 3")
+        }
+        console.log(poll.answers);
+        this.displayResults("string");
+        
+        },
+        displayResults(type = "array"){
+            if(type === "array"){
+                console.log(poll.answers);
+            }else if(type === "string"){
+                console.log(`Poll results are ${this.answers.join(", ")}`);
+            }
+        }
+    
+    };
+    
+    document.querySelector(".poll").addEventListener("click", poll.registerNewAnswer.bind(poll));
+
+    // poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+    // poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string');
+    // poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] });
+
+    console.log("---Challenge complete---");
+
+    //
+
+    console.log("---Immediately Invoked Function Expressions (IIFE)---");
+    //Immediately Invoked Function Expressions (IIFE)
+
+    //normal function.
+    // const runOnce = function(){
+    //     console.log("this will never run again!");
+    // }
+    // runOnce();
+
+    //IIFE
+    (function(){
+        console.log("this will never run again!");
+        const isprivate = 23;
+    })(); 
+    // console.log(isprivate); //wont work, private scoped.
+
+    //arrow function.
+    (()=>console.log("this will never run again!"))();
+    
+    {
+        const isPrivate = 34; // blocked scope
+        var notPrivate = 23; // global scope
+    }
+    // console.log(isPrivate);
+    console.log(notPrivate);
+
+    //Closures.
+    console.log("---Closures---");
+
+    const secureBooking = function(){
+
+        let passengerCount = 0;
+        return function(){
+            passengerCount ++;
+            console.log(`${passengerCount} passengers`);
+        }
+    };
+
+    const booker = secureBooking();
+    booker();
+    booker();
+    booker();
+    booker();
+    booker();
+
+    console.dir(booker);
+
+
+    //EX: 1
+    let f;
+    const g = function(){
+        const a = 23;
+        f = function(){
+            console.log(a * 2);
+        }
+    }
+
+    const h  = function(){
+        const b = 777;
+        f = function(){
+            console.log(b * 2);
+        }
+    }
+
+    g();
+    f();
+
+    console.dir(f) // here scope a = 23.
+    // re-assigned f function by h 
+    h();
+    f();
+
+    console.dir(f) // here scope b = 777.
+
+    // EX:2
+    const boardPassengers2 = function(n , wait){
+        const perG = Math.round(n / 3);
+
+        setTimeout(function(){
+            console.log(`We are now boarding all ${n} passengers`);
+            console.log(`There are 3 groups each with ${perG} passengers`);
+        },wait * 1000);
+
+        console.log(`Will start boarding in ${wait} seconds....`);
+        };
+
+        const perG = 1000; // this wont be used because there is the same variable in its parent scope so it wont go till the global scope.
+        boardPassengers2(180,3);
+
+        //
+        //simple challenge.
+        (function(){
+            const header = document.querySelector("h1");
+            header.style.color = "red";
+            
+            document.body.addEventListener("click",
+                function(){
+                    header.style.color = "blue"    
+                }
+            );
+        
+        })()
+        //
+
+        
