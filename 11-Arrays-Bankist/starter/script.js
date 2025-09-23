@@ -3,13 +3,14 @@
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // BANKIST APP
-
+console.log("---BANKIST APP---");
 // Data
 const account1 = {
   owner: 'Suraj Maru',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  
 };
 
 const account2 = {
@@ -61,6 +62,70 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//transaction logic.
+const displayMovements = function(movements){
+containerMovements.innerHTML = " ";
+// .textContent = 0;
+
+movements.forEach(function(mov, i){
+
+  const type = mov > 0 ? "deposit" : "withdrawal"
+
+  const html = `
+  
+  <div class="movements__row">
+      <div class="movements__type movements__type--${type}">
+      ${i + 1} ${type}</div>
+      <div class="movements__value">${mov}</div>
+    </div>
+
+  `;
+
+  containerMovements.insertAdjacentHTML("afterbegin", html );
+})
+}
+displayMovements(account1.movements);
+
+//username logic
+const createUserNames = function(acc){
+
+  acc.forEach(function(acc){
+
+    acc.username = acc.owner.toLowerCase().split(" ").map(ele=>ele[0]).join("");
+    // creating a new peoperty in the account1,2,3,4 objects which will have the new string of the username for the following owner.
+  })
+}
+createUserNames(accounts);
+console.log(accounts);
+
+
+
+//////////////////////////////////////////
+console.log("---BANKIST APP COMPLETE---");
+
+console.log("---Challenge 1---");
+
+
+const checkDogs =  function(arr1,arr2){
+ const arr11 = arr1.slice(1,-2);
+ console.log(arr11);
+
+ const tArr = [...arr11,...arr2]
+ console.log(tArr);
+
+ for(const [f,l] of tArr.entries()){
+   if(l>0 && l <=3 ){
+    console.log(`Dog number ${f + 1} is still a puppy 🐶`);
+  }else{
+    console.log(`Dog number ${f + 1} is an adult, and is ${l} years old`);
+  }
+ }
+}
+checkDogs([3, 5, 2, 12, 7],[4, 1, 15, 8, 3]);
+checkDogs([9, 16, 6, 8, 3],[10, 5, 6, 1, 4]);
+
+
+console.log("---Challenge 1 complete---");
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // Concepts
@@ -181,3 +246,46 @@ console.log(currenciesUnique);
 currenciesUnique.forEach(function(value,_,map){
   console.log(`${_}: ${value}`);
 })
+
+//
+
+//array map method.
+console.log("---array map method---");
+
+const movements2 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const eurToUsd = 1.1;
+const movements2Usd = movements2.map(function(mov){
+ const s = mov*eurToUsd;
+ return s;
+});
+
+const movements2Usd2 = movements2.map(mov => mov*eurToUsd); 
+//with arrow function
+//arrow function automatically returns the value.
+
+console.log(movements2Usd);
+console.log(movements2Usd2);
+console.log(movements2);
+
+//with for of loop.
+const move2 = [];
+for(const mov of movements2){
+  move2.push(mov*eurToUsd)
+}
+console.log(move2);
+
+// element,index and array in map(). 
+const md = movements2.map((move, i ,arr)=>
+
+  //same logic which was written below but better.
+  `movement ${i+1}: You ${move > 0 ? "deposited":"withdrew"} ${Math.abs(move)}`
+
+  // previous logic.
+  // if(move > 0 ){
+  //   return (`movement ${i+1}: You deposited ${Math.abs(move)}`);
+  // }else{
+  //   return (`movement ${i+1}: You withdrew ${Math.abs(move)}`); //Math.abs() removes the sign "-".
+  // }
+);
+console.log(md);
