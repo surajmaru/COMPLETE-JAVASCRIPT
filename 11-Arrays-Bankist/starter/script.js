@@ -76,7 +76,7 @@ movements.forEach(function(mov, i){
   <div class="movements__row">
       <div class="movements__type movements__type--${type}">
       ${i + 1} ${type}</div>
-      <div class="movements__value">${mov}</div>
+      <div class="movements__value">${mov}€</div>
     </div>
 
   `;
@@ -86,7 +86,16 @@ movements.forEach(function(mov, i){
 }
 displayMovements(account1.movements);
 
-//username logic
+// balance calculation.
+const calcDisplayBalance = function(movements){
+  const balance = movements.reduce((acc,curr)=> acc+curr,0);
+
+  labelBalance.textContent = `${balance}€`
+}
+calcDisplayBalance(account1.movements);
+
+
+//username logic.
 const createUserNames = function(acc){
 
   acc.forEach(function(acc){
@@ -98,7 +107,32 @@ const createUserNames = function(acc){
 createUserNames(accounts);
 console.log(accounts);
 
+//bottom summary logic.
+const calcDisplaySummary = function(movements){
+  const incomes = movements
+  .filter(mov=>mov>0)
+  .reduce((acc,curr)=> acc+curr,0);
+  labelSumIn.textContent = `${incomes}€ `
 
+  const outcomes = movements
+  .filter(mov=> mov<0)
+  .reduce((acc,curr)=> acc+curr);
+  labelSumOut.textContent = `${Math.abs(outcomes)}€`
+
+  const interest = movements
+  .filter(mov=>mov>0)
+  .map(mov => mov*1.2/100)
+  .filter((int,i,arr)=>{
+    console.log(arr);
+    return int >= 1;
+  })
+  .reduce((acc,curr,i,arr)=>{
+    console.log(arr);
+   return acc+curr
+  },0);
+  labelSumInterest.textContent = `${interest}`;
+}
+calcDisplaySummary(account1.movements);
 
 //////////////////////////////////////////
 console.log("---BANKIST APP COMPLETE---");
@@ -126,6 +160,53 @@ checkDogs([9, 16, 6, 8, 3],[10, 5, 6, 1, 4]);
 
 
 console.log("---Challenge 1 complete---");
+
+
+console.log("---Challenge 2---");
+
+const calcAverageHumanAge = function(age){
+  
+  const humanAges = age.map(ele=>ele<=2? 2*ele : 16 + ele * 4 );
+  const adults = humanAges.filter(age => age>=18 );
+
+  console.log(humanAges);
+  console.log(adults);
+
+  const average = adults.reduce((acc,curr)=> acc+curr,0)/adults.length;
+  // 2 3. (2+3)/2 = 2.5 === 2/2+3/2 = 2.5
+  //const average = adults.reduce((acc,curr,i,arr)=> acc+curr/arr.length,0)
+  // console.log(average);
+  return average;
+
+}
+const a = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+const a2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+console.log(a,a2);
+
+console.log("---Challenge 2 complete---");
+
+console.log("---Challenge 3---");
+
+//write with arrow function.
+const calcAverageHumanAge2 = age =>
+  
+  age.map(ele=>ele<=2? 2*ele : 16 + ele * 4 )
+  .filter(age => age>=18 )
+  .reduce((acc,curr,i,arr) => acc+curr/arr.length,0);
+
+  // console.log(humanAges);
+  // console.log(adults);
+
+  // 2 3. (2+3)/2 = 2.5 === 2/2+3/2 = 2.5
+  //const average = adults.reduce((acc,curr,i,arr)=> acc+curr/arr.length,0)
+  // console.log(average);
+  
+const a3 = calcAverageHumanAge2([5, 2, 4, 1, 15, 8, 3]);
+const a4 = calcAverageHumanAge2([16, 6, 10, 5, 6, 1, 4]);
+console.log(a3,a4);
+
+console.log("---Challenge 3 complete---");
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // Concepts
@@ -289,3 +370,104 @@ const md = movements2.map((move, i ,arr)=>
   // }
 );
 console.log(md);
+
+//array filter method.
+console.log("---array filter method---");
+
+const deposits = movements2.filter(function(mov){
+  return mov > 0
+})
+console.log(movements2);
+console.log(deposits);
+//with the array methods chaining is possible and its very useful.
+// this is functional programming too.
+
+// with for of loop.
+const depositsFor =[];
+for(const mov of movements2){
+  if(mov>0){
+    depositsFor.push(mov);
+  }
+}
+console.log(depositsFor);
+
+//for withdrawals.
+const withdrawals = movements2.filter(m => m<0); // in arrow function we dont write return, its already happening.
+console.log(movements2);
+console.log(withdrawals);
+
+// with for of loop.
+const withdrawalFor =[];
+for(const mov of movements2){
+  if(mov<0){
+    withdrawalFor.push(mov);
+  }
+}
+console.log(withdrawalFor);
+
+//array reduce method.
+console.log("---array reduce method---");
+
+console.log(movements2);
+
+// accumulator is like a snowball
+const balance = movements2.reduce(function(acc,curr,i,arr){
+  console.log(`Iteration ${i}: ${acc}`);
+ return acc + curr;
+},0)
+console.log(balance);
+
+//with an arrow function.
+const balance2 = movements2.reduce((acc,curr)=>acc + curr,0);
+console.log(balance2);
+
+// same with for of loop.
+let balance3 = 0;
+for(const mov of movements2){
+  balance3+= mov;
+}
+console.log(balance3);
+
+// Maximun of the movements2.
+const max = movements2.reduce((acc,curr)=>{
+  if(acc> curr){
+    return acc;
+  }else{
+    return curr
+  }
+}, movements2[0]);
+console.log(max);
+
+// same with ternary opertator.
+const max2 = movements2.reduce((acc,curr)=> acc>curr? acc:curr);
+console.log(max2);
+
+
+// chaining methods.
+const eurToUse2 = 1.1;
+const totalDeposits = movements2
+.filter(mov => mov>0)
+.map(mov => mov*eurToUse2)
+.reduce((acc,curr) => acc+curr, 0);
+
+console.log(totalDeposits);
+
+//the find method.
+console.log("---The find method---");
+
+const m =movements2.find(val=>val<0);
+console.log(m);
+
+console.log(accounts);
+
+const account = accounts.find((acc)=>{
+  return acc.owner === "Suraj Maru"
+})
+console.log(account);
+
+// by for of way.
+for(const a of accounts){
+  if(a.owner === "Suraj Maru"){
+    console.log(a);
+  }
+}
