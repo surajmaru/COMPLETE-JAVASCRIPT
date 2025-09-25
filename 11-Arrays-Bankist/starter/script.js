@@ -14,21 +14,21 @@ const account1 = {
 };
 
 const account2 = {
-  owner: 'Bob Davis',
+  owner: 'Tony Stark',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
 };
 
 const account3 = {
-  owner: 'Yash Williams',
+  owner: 'Yash More',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
 };
 
 const account4 = {
-  owner: 'Jay Patil',
+  owner: 'Jay Singh',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -61,13 +61,13 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
-
+//////////////////////////////////////
 //transaction logic.
-const displayMovements = function(movements){
+const displayMovements = function(acc){
 containerMovements.innerHTML = " ";
 // .textContent = 0;
 
-movements.forEach(function(mov, i){
+acc.movements.forEach(function(mov, i){
 
   const type = mov > 0 ? "deposit" : "withdrawal"
 
@@ -84,17 +84,15 @@ movements.forEach(function(mov, i){
   containerMovements.insertAdjacentHTML("afterbegin", html );
 })
 }
-displayMovements(account1.movements);
-
+////////////////////////////////////
 // balance calculation.
-const calcDisplayBalance = function(movements){
-  const balance = movements.reduce((acc,curr)=> acc+curr,0);
-
+const calcDisplayBalance = function(acc){
+  const balance = acc.movements.reduce((acc,curr)=> acc+curr,0);
+  acc.balance = balance; // storing the account balance in the object for the later use.
   labelBalance.textContent = `${balance}€`
 }
-calcDisplayBalance(account1.movements);
 
-
+/////////////////////////////////
 //username logic.
 const createUserNames = function(acc){
 
@@ -106,22 +104,22 @@ const createUserNames = function(acc){
 }
 createUserNames(accounts);
 console.log(accounts);
-
+////////////////////////////////////////
 //bottom summary logic.
-const calcDisplaySummary = function(movements){
-  const incomes = movements
+const calcDisplaySummary = function(acc){
+  const incomes = acc.movements
   .filter(mov=>mov>0)
   .reduce((acc,curr)=> acc+curr,0);
   labelSumIn.textContent = `${incomes}€ `
 
-  const outcomes = movements
+  const outcomes = acc.movements
   .filter(mov=> mov<0)
-  .reduce((acc,curr)=> acc+curr);
+  .reduce((acc,curr)=> acc+curr,0); 
   labelSumOut.textContent = `${Math.abs(outcomes)}€`
 
-  const interest = movements
+  const interest = acc.movements
   .filter(mov=>mov>0)
-  .map(mov => mov*1.2/100)
+  .map(mov => mov*acc.interestRate/100)
   .filter((int,i,arr)=>{
     console.log(arr);
     return int >= 1;
@@ -130,9 +128,107 @@ const calcDisplaySummary = function(movements){
     console.log(arr);
    return acc+curr
   },0);
-  labelSumInterest.textContent = `${interest}`;
+  labelSumInterest.textContent = `${interest}€`;
 }
-calcDisplaySummary(account1.movements);
+
+//we sorted those 3 function calls in one function. "clean code practice" 
+ const updateUI = function(currentAccount){
+  //display movements.
+    displayMovements(currentAccount);
+    
+     //display balance.
+    calcDisplayBalance(currentAccount);
+    
+    //display summary.
+    calcDisplaySummary(currentAccount);
+ }
+
+//////////////////////////////////////
+//login implementation.
+let currentAccount;
+
+btnLogin.addEventListener("click",function(e){
+  e.preventDefault();// prevent form from submitting.
+
+  currentAccount = accounts.find(acc=> acc.username === inputLoginUsername.value); // beacuse of this line everything is happening.
+
+  if(currentAccount?.pin === Number(inputLoginPin.value) ){ // if the current account exists then only it will go to further operation. 
+   
+   // display ui and welcome message.
+   labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(" ")[0]}`;
+
+   containerApp.style.opacity = 1;
+
+   // clear input fields.
+   inputLoginUsername.value = inputLoginPin.value = "";
+   inputLoginPin.blur();
+
+    //update the ui.
+    updateUI(currentAccount);
+
+    console.log("LOGIN");
+  }
+  else if(!currentAccount){
+    console.log("INCORRECT");
+    document.querySelector(".welcome").innerHTML = "Incorrect User";
+
+  }
+})
+//////////////////////////////////////////
+//transfer money logic.
+btnTransfer.addEventListener("click",function(e){
+  e.preventDefault();
+
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+  const amount = Number(inputTransferAmount.value);
+
+  console.log(amount,receiverAcc);
+
+  if(receiverAcc &&  amount > 0 && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username ){
+
+    //doing the transfer.
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    //update the ui.
+    updateUI(currentAccount);
+
+    console.log("transfer valid");
+  }
+
+  inputTransferAmount.value = inputTransferTo.value = "";
+});
+
+/////////////////////////////////////////////
+// close account implementation.
+//findIndex is a new es6 method.
+// for this idea we want to enter the username and then we will just delete that whole object from the array itself.
+// so for deletng the object from the "accounts" array we need the splice method and this method needs the index of which we want to delete so we will use the "findIndex" method for this implementation.
+
+btnClose.addEventListener("click",function(e){
+  e.preventDefault();
+  
+  if( inputCloseUsername && inputCloseUsername.value === currentAccount.username && Number(inputClosePin.value) === currentAccount.pin){
+    
+    const index = accounts.findIndex(acc => acc.username === currentAccount.username); // we are just matching the condition and saving the object's index in the variable "index".
+    console.log(index);
+    
+    
+    //Hide UI.
+    containerApp.style.opacity = 0;
+    
+    //Delete account.
+    accounts.splice(index,1); // and here we called the index of the object which we want to delete.
+    
+    
+    console.log("DELETE");
+  }
+  //Clear the input value.
+  inputCloseUsername.value = inputClosePin.value = "";
+});
+
+
+
 
 //////////////////////////////////////////
 console.log("---BANKIST APP COMPLETE---");
@@ -471,3 +567,37 @@ for(const a of accounts){
     console.log(a);
   }
 }
+
+//find index method.
+console.log("---findIndex method---");
+
+
+const numbers = [1, 3, 7, 8, 10];
+
+const index = numbers.findIndex(num => num % 2 === 0);
+
+console.log(index); // 3  (because numbers[3] = 8)
+
+//
+const users = [
+  { id: 1, name: "Suraj" },
+  { id: 2, name: "Amit" },
+  { id: 3, name: "Priya" }
+];
+
+const index2 = users.findIndex(user => user.name === "Amit");
+
+console.log(index2); // 1
+
+//
+const numbers2 = [5, 7, 9];
+
+const index3 = numbers.findIndex(num => num > 10);
+
+console.log(index3); // -1 (no match)
+
+//
+const arrr = [10, 20, 30];
+
+console.log(arrr.find(x => x > 15));     // 20
+console.log(arrr.findIndex(x => x > 15)); // 1
