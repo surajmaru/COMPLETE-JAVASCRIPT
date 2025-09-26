@@ -199,8 +199,11 @@ btnTransfer.addEventListener("click",function(e){
   inputTransferAmount.value = inputTransferTo.value = "";
 });
 
+
 /////////////////////////////////////////////
+
 // close account implementation.
+
 //findIndex is a new es6 method.
 // for this idea we want to enter the username and then we will just delete that whole object from the array itself.
 // so for deletng the object from the "accounts" array we need the splice method and this method needs the index of which we want to delete so we will use the "findIndex" method for this implementation.
@@ -227,6 +230,22 @@ btnClose.addEventListener("click",function(e){
   inputCloseUsername.value = inputClosePin.value = "";
 });
 
+////////////////////////////////////////////////
+//loan logic.
+btnLoan.addEventListener("click", function(e){
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  //logic for loan.
+  if(amount && amount>0 && currentAccount.movements.some(mov=>mov >= amount * 0.1)){
+    // add the money.
+    currentAccount.movements.push(amount);
+    //update the ui.
+    updateUI(currentAccount);
+  }
+
+  inputLoanAmount.value = "";
+})
 
 
 
@@ -234,6 +253,16 @@ btnClose.addEventListener("click",function(e){
 console.log("---BANKIST APP COMPLETE---");
 
 console.log("---Challenge 1---");
+
+
+// Julia and Kate are doing a study on dogs. So each of them asked 5 dog owners about their dog's age, and stored the data into an array (one array for each). For now, they are just interested in knowing whether a dog is an adult or a puppy. A dog is an adult if it is at least 3 years old, and it's a puppy if it's less than 3 years old.
+
+// Create a function 'checkDogs', which accepts 2 arrays of dog's ages ('dogsJulia' and 'dogsKate'), and does the following things:
+
+// 1. Julia found out that the owners of the FIRST and the LAST TWO dogs actually have cats, not dogs! So create a shallow copy of Julia's array, and remove the cat ages from that copied array (because it's a bad practice to mutate function parameters)
+// 2. Create an array with both Julia's (corrected) and Kate's data
+// 3. For each remaining dog, log to the console whether it's an adult ("Dog number 1 is an adult, and is 5 years old") or a puppy ("Dog number 2 is still a puppy 🐶")
+// 4. Run the function for both test datasets
 
 
 const checkDogs =  function(arr1,arr2){
@@ -260,6 +289,16 @@ console.log("---Challenge 1 complete---");
 
 console.log("---Challenge 2---");
 
+// Let's go back to Julia and Kate's study about dogs. This time, they want to convert dog ages to human ages and calculate the average age of the dogs in their study.
+
+// Create a function 'calcAverageHumanAge', which accepts an arrays of dog's ages ('ages'), and does the following things in order:
+
+// 1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
+// 2. Exclude all dogs that are less than 18 human years old (which is the same as keeping dogs that are at least 18 years old)
+// 3. Calculate the average human age of all adult dogs (you should already know from other challenges how we calculate averages 😉)
+// 4. Run the function for both test datasets
+
+
 const calcAverageHumanAge = function(age){
   
   const humanAges = age.map(ele=>ele<=2? 2*ele : 16 + ele * 4 );
@@ -283,6 +322,8 @@ console.log("---Challenge 2 complete---");
 
 console.log("---Challenge 3---");
 
+// Rewrite the 'calcAverageHumanAge' function from the previous challenge, but this time as an arrow function, and using chaining!
+
 //write with arrow function.
 const calcAverageHumanAge2 = age =>
   
@@ -303,6 +344,108 @@ console.log(a3,a4);
 
 console.log("---Challenge 3 complete---");
 
+console.log("---Challenge 4---");
+
+
+// This time, Julia and Kate are studying the activity levels of different dog breeds.
+
+// YOUR TASKS:
+// 1. Store the the average weight of a "Husky" in a variable "huskyWeight"
+// 2. Find the name of the only breed that likes both "running" and "fetch" ("dogBothActivities" variable)
+// 3. Create an array "allActivities" of all the activities of all the dog breeds
+// 4. Create an array "uniqueActivities" that contains only the unique activities (no activity repetitions). HINT: Use a technique with a special data structure that we studied a few sections ago.
+// 5. Many dog breeds like to swim. What other activities do these dogs like? Store all the OTHER activities these breeds like to do, in a unique array called "swimmingAdjacent".
+// 6. Do all the breeds have an average weight of 10kg or more? Log to the console whether "true" or "false".
+// 7. Are there any breeds that are "active"? "Active" means that the dog has 3 or more activities. Log to the console whether "true" or "false".
+
+// BONUS: What's the average weight of the heaviest breed that likes to fetch? HINT: Use the "Math.max" method along with the ... operator.
+
+
+const breeds = [
+  {
+    breed: 'German Shepherd',
+    averageWeight: 32,
+    activities: ['fetch', 'swimming'],
+  },
+  {
+    breed: 'Dalmatian',
+    averageWeight: 24,
+    activities: ['running', 'fetch', 'agility'],
+  },
+  {
+    breed: 'Labrador',
+    averageWeight: 28,
+    activities: ['swimming', 'fetch'],
+  },
+  {
+    breed: 'Beagle',
+    averageWeight: 12,
+    activities: ['digging', 'fetch'],
+  },
+  {
+    breed: 'Husky',
+    averageWeight: 26,
+    activities: ['running', 'agility', 'swimming'],
+  },
+  {
+    breed: 'Bulldog',
+    averageWeight: 36,
+    activities: ['sleeping'],
+  },
+  {
+    breed: 'Poodle',
+    averageWeight: 18,
+    activities: ['agility', 'fetch'],
+  },
+];
+
+// 1
+const huskyWeight = breeds.find(avg=>avg.breed === "Husky").averageWeight;
+console.log(huskyWeight);
+
+// 2 
+const dogBothActivities = breeds.find(breed=>
+  breed.activities.includes("running") && breed.activities.includes("fetch")).breed;
+console.log(dogBothActivities);
+
+// 3
+// const allActivities = breeds.map(b=>b.activities).flat();
+const allActivities = breeds.flatMap(b=>b.activities);
+console.log(allActivities);
+
+// 4
+// const uniqueActivities = new Set(allActivities);
+// console.log(uniqueActivities);
+
+const uniqueActivities = [...new Set(allActivities)];
+console.log(uniqueActivities);
+
+// 5
+const swimmingAdjacent1 = [...new Set(
+  breeds
+  .filter(f=>f.activities.includes("swimming"))
+  .flatMap(f=>f.activities)
+  .filter(f=>f !== "swimming")
+)];
+console.log(swimmingAdjacent1);
+
+// 6
+const avgW = breeds.every(w=>w.averageWeight>10)
+console.log(avgW);
+
+// 7
+const dogActive = breeds.some(a=>a.activities.length >= 3)
+console.log(dogActive);
+
+// bonus
+const avgHeavy2 = breeds.filter(h=>h.activities.includes("fetch"));
+console.log(avgHeavy2);
+const avgHeavy3 = avgHeavy2.map(avg=>avg.averageWeight);
+console.log(avgHeavy3);
+const avgHeavy = Math.max(...avgHeavy3);
+console.log(avgHeavy);
+
+console.log("---Challenge 4 complete---");
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // Concepts
@@ -601,3 +744,76 @@ const arrr = [10, 20, 30];
 
 console.log(arrr.find(x => x > 15));     // 20
 console.log(arrr.findIndex(x => x > 15)); // 1
+
+
+//findlast and findlastindex methods.
+console.log("---findLast and findLastIndex methods---");
+
+console.log(movements2);
+const lastWith = movements2.findLast(mov=>mov<0);
+const lastWith2 = movements2.findLastIndex(mov=>mov<0);
+
+console.log(lastWith);
+console.log(lastWith2);
+
+const lastWith3 = movements2.findLastIndex(mov=>mov>2000);
+console.log(`Your lastest large movement was ${movements2.length - lastWith3} movements ago`);
+
+
+//some and every
+console.log("---some and every methods---");
+
+//some
+console.log(movements2);
+// this check only for equality
+console.log(movements2.includes(-130));
+
+// this method is great but if we want to check a condition then we have to use the some and every method.
+
+//this checks for condition.
+const dep =movements2.some(mov => mov > 3000);
+console.log(dep);
+
+console.log(movements2.some(mov => mov === -130 ));// for this we just can use the includes method but for a logical condition we use the "some " method. 
+
+//every.
+console.log(movements2.every(mov=>mov>0));
+console.log(account4.movements.every(mov=>mov>0));
+
+// common callback as a variable.
+const deps = mov=>mov>0;
+console.log(movements.some(deps));
+console.log(movements.every(deps));
+console.log(movements.filter(deps));
+
+//flat and flatMap
+console.log("---flat and flatMap methods---");
+
+//flat method.
+const arr5 = [[1,2,3],[4,5,6,],7,8];
+console.log(arr5.flat());
+//
+const arr5Deep = [[[1,2],3],[4,[5,6]],7,8];
+console.log(arr5Deep.flat());
+console.log(arr5Deep.flat(0));
+console.log(arr5Deep.flat(1));
+console.log(arr5Deep.flat(2));
+console.log(arr5Deep.flat(3)); // these numbers are the levels of nesting for in the array.
+console.log(arr5Deep.flat(Infinity));
+//
+// const accountMovements = accounts.map(acc=> acc.movements);
+// const accountFlat = accountMovements.flat();
+// console.log(accountMovements);
+// console.log(accountFlat);
+// const overallBalance = accountFlat.reduce((acc,curr)=> acc+curr,0);
+// console.log(overallBalance);
+
+//shorter version.
+const overallBalance = accounts.map(acc=> acc.movements).flat().reduce((acc,curr)=> acc+curr,0);
+console.log(overallBalance);
+
+//mapping and flat is a very common pair we use it many times, so this is why flatMap comes in play.
+
+//flatMap method.
+const overallBalance2 = accounts.flatMap(acc=> acc.movements).reduce((acc,curr)=> acc+curr,0);
+console.log(overallBalance2);
