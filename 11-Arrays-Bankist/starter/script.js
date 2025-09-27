@@ -10,6 +10,7 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  type: "premium",
   
 };
 
@@ -18,6 +19,7 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  type: "standard",
 };
 
 const account3 = {
@@ -25,6 +27,7 @@ const account3 = {
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
+  type: "premium",
 };
 
 const account4 = {
@@ -32,6 +35,7 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  type: "basic",
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -63,11 +67,19 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 //////////////////////////////////////
 //transaction logic.
-const displayMovements = function(acc){
+const displayMovements = function(movements, sort = false){
 containerMovements.innerHTML = " ";
 // .textContent = 0;
 
-acc.movements.forEach(function(mov, i){
+////////////////////////////////////////////////////
+// Changing the logic of the movements array whether to be sorted or not.
+
+// if sort is ture then "movements.slice().sort((a,b)=>a-b)" this will happen and then the sorted array will be stored in the "movs" variable.
+
+//And if "sorted" is false then nothing will happen, the movements array will be stored in the "movs" variable.
+const movs = sort ? movements.slice().sort((a,b)=>a-b) : movements;
+
+movs.forEach(function(mov, i){
 
   const type = mov > 0 ? "deposit" : "withdrawal"
 
@@ -134,7 +146,7 @@ const calcDisplaySummary = function(acc){
 //we sorted those 3 function calls in one function. "clean code practice" 
  const updateUI = function(currentAccount){
   //display movements.
-    displayMovements(currentAccount);
+    displayMovements(currentAccount.movements);
     
      //display balance.
     calcDisplayBalance(currentAccount);
@@ -247,7 +259,18 @@ btnLoan.addEventListener("click", function(e){
   inputLoanAmount.value = "";
 })
 
+/////////////////////////////////////
+//Bottom "sort" button toggle.
 
+let sorted = false;
+
+btnSort.addEventListener("click",function(e){
+  e.preventDefault();
+  
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+  
+});
 
 //////////////////////////////////////////
 console.log("---BANKIST APP COMPLETE---");
@@ -442,7 +465,7 @@ const avgHeavy2 = breeds.filter(h=>h.activities.includes("fetch"));
 console.log(avgHeavy2);
 const avgHeavy3 = avgHeavy2.map(avg=>avg.averageWeight);
 console.log(avgHeavy3);
-const avgHeavy = Math.max(...avgHeavy3);
+const avgHeavy = Math.max(...avgHeavy3); // Math.max(avhHeavy3) will now work cause the math.max does not work with an array its works with the numbers. so thats why we spread the array into its elements which are the numbers.
 console.log(avgHeavy);
 
 console.log("---Challenge 4 complete---");
@@ -786,7 +809,7 @@ console.log(movements.some(deps));
 console.log(movements.every(deps));
 console.log(movements.filter(deps));
 
-//flat and flatMap
+//flat and flatMap methods
 console.log("---flat and flatMap methods---");
 
 //flat method.
@@ -817,3 +840,168 @@ console.log(overallBalance);
 //flatMap method.
 const overallBalance2 = accounts.flatMap(acc=> acc.movements).reduce((acc,curr)=> acc+curr,0);
 console.log(overallBalance2);
+
+
+// sort method 
+console.log("---Sorting() method---");
+
+//strings.
+const owners = ["suraj","jay","bob","yash"];
+console.log(owners.sort());
+console.log(owners);
+
+//numbers.
+console.log(movements2);
+console.log(movements2.sort()); // gives wrong here.
+//sort treates the numbers as the string and then sort it like 100,20,3000,50,6. like that.
+
+// if we return something < 0 then A will be before B. (keep order)
+// and if we return something > 0 then B will be before A. (switch order)
+// This is for the ascending order.
+movements2.sort((a,b) =>{ // a is the current value and b is the next value.
+  if (a>b) return 1; // this means, if the prevous number is greater than the next number then swap them both.
+  if (a<b) return -1; // here if the previous number is less then the next number then keep the same dont swap them.
+});
+
+//new way.
+movements2.sort((a,b)=>  a - b);
+// here, if a is greater than b then the result will be a positive number. then it return that positive number. And it swaps them.
+//And if the a is less then b then the result will be negative then it will return a negative number so, it doesnt swap them. 
+//Because this the condition for the ascending order. 
+console.log(`Ascending: ${movements2}`);
+
+//
+
+// This is for the descending order.
+// movements2.sort((a,b)=>{
+//   if (a>b) return -1;
+//   if (a<b) return 1;
+// })
+
+// This is the other better way to do the same.
+movements2.sort((a,b)=> b - a); 
+console.log(`Descending: ${movements2}`);
+
+// IF you have a mixed array of strings and numbers then it will not work.
+
+// Array grouping.
+console.log("---Array Grouping---");
+
+
+const movements3 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+console.log(movements3);
+
+// in here we do grouping by "Object.groupBy()" and not on the array name directly.
+const groupedMovements = Object.groupBy(movements3,movement=> // it takes 2 arguments, 1st is the array itself and 2nd is the callback function which will determine how exactly we want to group the elements in the array.
+movement > 0 ? "deposits" : "withdrawals");
+
+console.log(groupedMovements); // Here we get an object as the result.
+//op:- 
+// {deposits: Array(5), withdrawals: Array(3)}
+// deposits: (5) [200, 450, 3000, 70, 1300]
+// withdrawals: (3) [-400, -650, -130]
+
+//
+
+const groupedByActivity = Object.groupBy(accounts, account=> {
+
+  const movementCount = account.movements.length;
+
+  if(movementCount>= 8 ) return "very active";
+  if(movementCount>= 4 ) return "active";
+  if(movementCount>= 1 ) return "moderate";
+  return "inactive";
+  // so these 4 are the possible groups made depending on the condition.
+  // And it will be sorted in one of or more of the above groups depending on the condition.
+});
+console.log(groupedByActivity);
+
+//op:-
+// {very active: Array(3), active: Array(1)}
+
+// active: Array(1)
+// 0: {owner: 'Jay Singh', movements: Array(5), interestRate: 1, pin: 4444, username: 'js'}
+// length: 1
+// [[Prototype]]: Array(0)
+
+// very active: Array(3)
+// 0: {owner: 'Suraj Maru', movements: Array(8), interestRate: 1.2, pin: 1111, username: 'sm'}
+// 1: {owner: 'Tony Stark', movements: Array(8), interestRate: 1.5, pin: 2222, username: 'ts'}
+// 2: {owner: 'Yash More', movements: Array(8), interestRate: 0.7, pin: 3333, username: 'ym'}
+// length: 3
+// [[Prototype]]: Array(0)
+
+//
+
+// grouping the objects by a common key or something.
+
+const groupedAccounts = Object.groupBy(accounts, account=> account.type);
+
+const groupedAccounts2 = Object.groupBy(accounts, ({type})=> type); // by Destructuring method.
+
+console.log(groupedAccounts);
+console.log(groupedAccounts2);
+//op:- {premium: Array(2), standard: Array(1), basic: Array(1)}
+
+
+// Creating and Filling Arrays.
+console.log("---Creating and Filling Arrays---");
+
+const aar = [1,2,3,4,5,6,7,8,9];
+console.log(new Array(1,2,3,4,5,6,7,8,9));
+
+//Empty arrays + fill method.
+const x = new Array(7);
+console.log(x); // this contains empty array of size 7.
+
+console.log(x.map(()=>5)); // This doesnt work.
+
+console.log(x.fill(1)); // this method works with the constructed empty erray of length 7.
+
+const y = new Array(8);
+y.fill(1,3) // "1" is the element and "3" is the starting index.
+console.log(y);
+
+const z = new Array(8);
+z.fill(1,3,5); // this starts filling "1" from 3rd index till the index before the end parameter which is "5-1 = 4".
+console.log(z);
+
+aar.fill(23,2,6);
+console.log(aar);
+
+// Array.from
+const xx = Array.from({length:7}, ()=> 1)
+console.log(xx); // (7) [1, 1, 1, 1, 1, 1, 1]
+
+const yy = Array.from({length: 7}, (_, i)=> i + 1); // here "_" in the parameter is the throwaway parameter. like if we dont want anything in that position of parameter then we use the "_".
+console.log(yy); // (7) [1, 2, 3, 4, 5, 6, 7]
+
+const zz = Array.from({length:100},(_,i)=> i = Math.round(Math.random()*10))
+console.log(zz); // 100 random dice rolls.
+
+
+// get access with the elements on the UI.
+
+// labelBalance.addEventListener("click",function(){
+//   const movementsUI = Array.from(document.querySelectorAll(".movements__value"));
+//   console.log(movementsUI.map(ele => Number(ele.textContent.replace("€",""))));
+  
+// });
+
+labelBalance.addEventListener("click",function(){
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+     ele => Number(ele.textContent.replace("€","")));
+
+  console.log(movementsUI);
+  // we created an array from the result of this "document.querySelectorAll(".movements__value")" It gives back a NodeList (looks like an array, but not a real array) which is not really an array but a array like structure and this structure can easily be converted to an array using "Array.from" and then as a second step we included a mapping function which transforms the initial array into an array as exactly we wanted like this "ele => Number(ele.textContent.replace("€",""))", converting the raw element with its text content and replacing the euro symbol with nothing. 
+
+  // then we get the array of numbers on the UI after clicking on the label on which we called the eventlistener.
+  //op:- (8) [1300, 70, -130, -650, 3000, -400, 450, 200]
+
+    // Another way of converting to an array. but then we have to map() separately.
+  const movementsUI2 = [...document.querySelectorAll(".movements__value")];
+  movementsUI2.map(ele => Number(ele.textContent.replace("€","")));
+  // Like this, so the "Array.from" is the best way to go.
+});
