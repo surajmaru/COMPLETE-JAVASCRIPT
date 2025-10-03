@@ -18,17 +18,17 @@ const account1 = {
   pin: 1111,
   type: "premium",
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-07-26T17:01:17.194Z',
-    '2020-07-28T23:36:17.929Z',
-    '2020-08-01T10:51:36.790Z',
+    '2024-06-18T21:31:17.178Z',
+    '2024-08-23T07:42:02.383Z',
+    '2025-08-28T09:15:04.904Z',
+    '2025-09-26T10:17:24.185Z',
+    '2025-09-28T14:11:59.604Z',
+    '2025-10-01T17:01:17.194Z',
+    '2025-10-02T14:36:17.929Z',
+    '2025-10-02T10:51:36.790Z',
   ],
-  currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  currency: 'INR',
+  locale: 'en-IN', // de-DE
   
 };
 
@@ -39,14 +39,14 @@ const account2 = {
   pin: 2222,
   type: "standard",
   movementsDates: [
-    '2019-11-01T13:15:33.035Z',
-    '2019-11-30T09:48:16.867Z',
-    '2019-12-25T06:04:23.907Z',
-    '2020-01-25T14:18:46.235Z',
-    '2020-02-05T16:33:06.386Z',
-    '2020-04-10T14:43:26.374Z',
-    '2020-06-25T18:49:59.371Z',
-    '2020-07-26T12:01:20.894Z',
+    '2024-11-01T13:15:33.035Z',
+    '2024-11-30T09:48:16.867Z',
+    '2024-12-25T06:04:23.907Z',
+    '2025-01-25T14:18:46.235Z',
+    '2025-02-05T16:33:06.386Z',
+    '2025-04-10T14:43:26.374Z',
+    '2025-06-25T18:49:59.371Z',
+    '2025-07-26T12:01:20.894Z',
   ],
   currency: 'USD',
   locale: 'en-US',
@@ -81,11 +81,68 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+
+
+// A complete function for the date logic. To keep it clean.
+// And the logic for the today,yesterday and so on logic.
+const formatMovementDate = function(date,locale){
+  
+  const daysPassed = (date1,date2) => 
+    Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 *24));
+
+  const daysPassed2 = daysPassed(new Date(), date);
+  console.log(daysPassed2);
+
+  if(daysPassed2 === 0) return `Today`;
+  if(daysPassed2 === 1) return `Yesterday`
+  if(daysPassed2 <= 7) return `${daysPassed2} days ago`;
+  
+  return new Intl.DateTimeFormat(locale).format(date)
+
+    // const day = `${date.getDate()}`.padStart(2,"0")
+    // const month = `${date.getMonth() + 1}`.padStart(2,"0");
+    // const year = date.getFullYear();
+    // return `${day}/${month}/${year}`;
+  }; 
+
+  // A simple function which will take any value andy locale and any currency. To just make our code look better.
+  const formatCurr = function(value, locale, currency){
+  
+      return new Intl.NumberFormat(locale,{
+        style: "currency",
+        currency: currency,
+      }).format(value);
+      
+  };
+
 //////////////////////////////////////
 //transaction logic.
-const displayMovements = function(movements, sort = false){
+const displayMovements = function(acc, sort = false){
 containerMovements.innerHTML = " ";
 // .textContent = 0;
+
+
+// const combinedMovementaDates = acc.movements.map((mov,i)=> {
+//   return {werwer}
+// })
+
+// Updated sorting method.
+const combinedMovementaDates = acc.movements.map((mov,i) => 
+  ({movement: mov,
+     movementDate: acc.movementsDates.at(i),
+  }));
+
+  console.log(combinedMovementaDates);
+  //op
+  // 0:{movement: 200, movementDate: '2019-11-18T21:31:17.178Z'}
+  // 1:{movement: 450, movementDate: '2019-12-23T07:42:02.383Z'}
+  // 2:{movement: -400, movementDate: '2020-01-28T09:15:04.904Z'}
+  // 3:{movement: 3000, movementDate: '2020-04-01T10:17:24.185Z'}
+  // 4:{movement: -650, movementDate: '2020-05-08T14:11:59.604Z'}
+  // 5:{movement: -130, movementDate: '2020-07-26T17:01:17.194Z'}
+  // 6:{movement: 70, movementDate: '2020-07-28T23:36:17.929Z'}
+  // 7:{movement: 1300, movementDate: '2020-08-01T10:51:36.790Z'}
+
 
 ////////////////////////////////////////////////////
 // Changing the logic of the movements array whether to be sorted or not.
@@ -93,18 +150,40 @@ containerMovements.innerHTML = " ";
 // if sort is ture then "movements.slice().sort((a,b)=>a-b)" this will happen and then the sorted array will be stored in the "movs" variable.
 
 //And if "sorted" is false then nothing will happen, the movements array will be stored in the "movs" variable.
-const movs = sort ? movements.slice().sort((a,b)=>a-b) : movements;
 
-movs.forEach(function(mov, i){
+if(sort) combinedMovementaDates.sort((a,b)=> a.movement - b.movement); // Updated sorting method.
 
-  const type = mov > 0 ? "deposit" : "withdrawal"
+// const movs = sort ? acc.movements.slice().sort((a,b)=>a-b) : acc.movements;
+
+combinedMovementaDates.forEach(function(obj, i){
+  const {movement, movementDate} = obj;
+
+  const type = movement > 0 ? "deposit" : "withdrawal";
+
+  ///////////////////////////////////////////////////
+  // Date logic in the html.
+  const date = new Date(movementDate);
+  const displayDate = formatMovementDate(date, acc.locale)
+  // Date logic in the html.
+  ///////////////////////////////////////////////////
+  
+  // Formatting the movwmwnt amount according to the country according to the user.
+  const formattedMov = formatCurr(movement,acc.locale,acc.currency)
+
+
+  // new Intl.NumberFormat(acc.locale,{
+  //   style: "currency",
+  //   currency: acc.currency,
+  // }).format(movement);
+  /////////////////////////////////////////
 
   const html = `
   
   <div class="movements__row">
       <div class="movements__type movements__type--${type}">
       ${i + 1} ${type}</div>
-      <div class="movements__value">${mov.toFixed(2)}€</div>
+      <div class="movements__date">${displayDate}</div>
+      <div class="movements__value">${formattedMov}</div>
     </div>
 
   `;
@@ -117,7 +196,7 @@ movs.forEach(function(mov, i){
 const calcDisplayBalance = function(acc){
   const balance = acc.movements.reduce((acc,curr)=> acc+curr,0);
   acc.balance = balance; // storing the account balance in the object for the later use.
-  labelBalance.textContent = `${balance.toFixed(2)}€`
+  labelBalance.textContent = formatCurr(balance,acc.locale,acc.currency);
 }
 
 /////////////////////////////////
@@ -138,12 +217,12 @@ const calcDisplaySummary = function(acc){
   const incomes = acc.movements
   .filter(mov=>mov>0)
   .reduce((acc,curr)=> acc+curr,0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€ `
+  labelSumIn.textContent = formatCurr(incomes,acc.locale,acc.currency);
 
   const outcomes = acc.movements
   .filter(mov=> mov<0)
   .reduce((acc,curr)=> acc+curr,0); 
-  labelSumOut.textContent = `${Math.abs(outcomes).toFixed(2)}€`
+  labelSumOut.textContent = formatCurr(Math.abs(outcomes),acc.locale,acc.currency);
 
   const interest = acc.movements
   .filter(mov=>mov>0)
@@ -156,13 +235,13 @@ const calcDisplaySummary = function(acc){
     console.log(arr);
    return acc+curr
   },0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCurr(interest,acc.locale,acc.currency);
 }
 
 //we sorted those 3 function calls in one function. "clean code practice" 
  const updateUI = function(currentAccount){
   //display movements.
-    displayMovements(currentAccount.movements);
+    displayMovements(currentAccount);
     
      //display balance.
     calcDisplayBalance(currentAccount);
@@ -187,6 +266,38 @@ btnLogin.addEventListener("click",function(e){
 
    containerApp.style.opacity = 1;
 
+   ///////////////////////////////////////////
+    // Date Logic under Current balance label.
+   
+    // internationalization date API.
+    const nowDate = new Date();
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      weekday: "long"
+
+    };
+
+    const locale = currentAccount.locale; 
+    // const locale = navigator.language;// automatic date and time select depending on the region which is on your browser.
+    console.log(locale);
+    // namespace for the internationalization API.
+    // labelDate.textContent = new Intl.DateTimeFormat(locale,options).format(nowDate); // here we replace the manual "en-IN" to the automatic "locale".
+
+    labelDate.textContent = new Intl.DateTimeFormat(locale,options).format(nowDate);
+
+    // Manual way. Above is the automatic way.
+    // const day = `${nowDate.getDate()}`.padStart(2,"0")
+    // const month = `${nowDate.getMonth() + 1}`.padStart(2,"0");
+    // const year = nowDate.getFullYear();
+    // const hours = `${nowDate.getHours()}`.padStart(2,"0");
+    // const minutes = `${nowDate.getMinutes()}`.padStart(2,"0");
+    // labelDate.textContent = `${day}/${month}/${year}, ${hours}:${minutes}`;
+
+
    // clear input fields.
    inputLoginUsername.value = inputLoginPin.value = "";
    inputLoginPin.blur();
@@ -201,7 +312,8 @@ btnLogin.addEventListener("click",function(e){
     document.querySelector(".welcome").innerHTML = "Incorrect User";
 
   }
-})
+});
+
 //////////////////////////////////////////
 //transfer money logic.
 btnTransfer.addEventListener("click",function(e){
@@ -217,6 +329,10 @@ btnTransfer.addEventListener("click",function(e){
     //doing the transfer.
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
+
+    // Add transfer date.
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
 
     //update the ui.
     updateUI(currentAccount);
@@ -268,6 +384,10 @@ btnLoan.addEventListener("click", function(e){
   if(amount && amount>0 && currentAccount.movements.some(mov=>mov >= amount * 0.1)){
     // add the money.
     currentAccount.movements.push(amount);
+
+    // Add loan date.
+    currentAccount.movementsDates.push(new Date().toISOString());
+
     //update the ui.
     updateUI(currentAccount);
   }
@@ -283,10 +403,17 @@ let sorted = false;
 btnSort.addEventListener("click",function(e){
   e.preventDefault();
   
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
   
 });
+
+//////////////////////////////////
+// Fake always logged in.
+currentAccount = account1;
+updateUI(currentAccount)
+containerApp.style.opacity = 100;
+
 
 //////////////////////////////////////////
 console.log("---BANKIST APP COMPLETE---");
@@ -529,3 +656,31 @@ console.log(Date.now());
 
 future.setFullYear(2047);
 console.log(future);
+
+// Operations With Dates.
+// Calculating differences between two dates.
+const future2 = new Date(2077, 10,19,15,23);
+console.log(+future2);
+const daysPassed = (date1,date2) => Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 *24));
+const days1 = daysPassed(new Date(2077, 3,4),new Date(2077, 3,14,10,8))
+console.log(days1);
+
+//Internationalizing Numbers (Intl).
+const num = 3242344.23;
+
+const options ={
+  style: "unit", // style: "percent", style: "currency",
+  unit: "mile-per-hour",
+    // unit: "celsius",
+    // unit: "kilometer-per-hour",
+    // currency: "EUR",
+    // currency: "INR",
+    // useGrouping: false,
+     
+}
+
+console.log("india: ",new Intl.NumberFormat("en-IN",options).format(num));
+console.log("USA: ",new Intl.NumberFormat("en-US",options).format(num));
+console.log("germany: ",new Intl.NumberFormat("de-DE",options).format(num));
+console.log("serya: ",new Intl.NumberFormat("ar-SY",options).format(num));
+console.log(navigator.language,new Intl.NumberFormat(navigator.language,options).format(num));
