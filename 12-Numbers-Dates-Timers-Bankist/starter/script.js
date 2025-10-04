@@ -238,6 +238,7 @@ const calcDisplaySummary = function(acc){
   labelSumInterest.textContent = formatCurr(interest,acc.locale,acc.currency);
 }
 
+//////////////////////////////////////
 //we sorted those 3 function calls in one function. "clean code practice" 
  const updateUI = function(currentAccount){
   //display movements.
@@ -250,9 +251,43 @@ const calcDisplaySummary = function(acc){
     calcDisplaySummary(currentAccount);
  }
 
+ ///////////////////////////////////////////
+ // Logout timer implementation.
+ const startLogoutTimer = function(){
+
+  const tick = function(){
+    
+    const min = String(Math.trunc(time / 60)).padStart(2,0);
+    const sec = String(time % 60).padStart(2,0);
+
+    // in each callback call it will print the remaining time to the UI.
+    labelTimer.textContent = `${min}:${sec}`;
+
+    
+    // when time is 0 seconds, stop timer and logout the user.
+    
+    if(time === 0){
+      clearInterval(timer);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = "Log in to get started";
+    };
+
+    // decrease one second.
+    time--;
+  
+  };
+
+   // Set the time to 5 minutes.
+   let time  = 300;
+   // call the timer every second.
+   tick();
+   const timer = setInterval(tick,1000);
+   return timer; // to use the clearInterval we have to return the timer function.
+  };
+
 //////////////////////////////////////
 //login implementation.
-let currentAccount;
+let currentAccount, timer; // we need the "timer" to exist between logins thats why its out in the global scope.
 
 btnLogin.addEventListener("click",function(e){
   e.preventDefault();// prevent form from submitting.
@@ -302,6 +337,13 @@ btnLogin.addEventListener("click",function(e){
    inputLoginUsername.value = inputLoginPin.value = "";
    inputLoginPin.blur();
 
+
+    // Timer clear for another account login logic.
+    if(timer) clearInterval(timer);
+
+    //Logout function call.
+    timer = startLogoutTimer(); //If we login in a ccount then the timer variable exists and then the above line will be executed when logging into another account.
+
     //update the ui.
     updateUI(currentAccount);
 
@@ -334,6 +376,12 @@ btnTransfer.addEventListener("click",function(e){
     currentAccount.movementsDates.push(new Date().toISOString());
     receiverAcc.movementsDates.push(new Date().toISOString());
 
+    // Timer clear/refresh when transfer money.
+    clearInterval(timer);
+
+    //Logout function call.
+    timer = startLogoutTimer();
+
     //update the ui.
     updateUI(currentAccount);
 
@@ -363,6 +411,7 @@ btnClose.addEventListener("click",function(e){
     
     //Hide UI.
     containerApp.style.opacity = 0;
+    setTimeout(function(){labelWelcome.textContent = "Account closed, Login with diffrent user"},800);
     
     //Delete account.
     accounts.splice(index,1); // and here we called the index of the object which we want to delete.
@@ -376,20 +425,30 @@ btnClose.addEventListener("click",function(e){
 
 ////////////////////////////////////////////////
 //loan logic.
+
 btnLoan.addEventListener("click", function(e){
   e.preventDefault();
   const amount = Math.floor(inputLoanAmount.value);
 
   //logic for loan.
   if(amount && amount>0 && currentAccount.movements.some(mov=>mov >= amount * 0.1)){
+    // setTimeout logic for a delay when asked for loan.
     // add the money.
-    currentAccount.movements.push(amount);
+   setTimeout(function() {currentAccount.movements.push(amount);
 
     // Add loan date.
     currentAccount.movementsDates.push(new Date().toISOString());
 
+
+    // Timer clear/refresh when pressed for loan.
+    clearInterval(timer); 
+
+    //Logout function call.
+    timer = startLogoutTimer();
+
     //update the ui.
     updateUI(currentAccount);
+  },3000)
   }
 
   inputLoanAmount.value = "";
@@ -410,9 +469,9 @@ btnSort.addEventListener("click",function(e){
 
 //////////////////////////////////
 // Fake always logged in.
-currentAccount = account1;
-updateUI(currentAccount)
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount)
+// containerApp.style.opacity = 100;
 
 
 //////////////////////////////////////////
@@ -684,3 +743,35 @@ console.log("USA: ",new Intl.NumberFormat("en-US",options).format(num));
 console.log("germany: ",new Intl.NumberFormat("de-DE",options).format(num));
 console.log("serya: ",new Intl.NumberFormat("ar-SY",options).format(num));
 console.log(navigator.language,new Intl.NumberFormat(navigator.language,options).format(num));
+
+//Timers: setTimeout and setInterval
+console.log("---Timers: setTimeout and setInterval---");
+
+
+// setTimeout.
+setTimeout((ing1,ing2)=>{
+  console.log(`Here is your pizza with ${ing1} and ${ing2}!`);
+},3000, "olives","tomato");
+
+
+const ingre = ["onion","corn"]
+const pizzaTimer = setTimeout((ing1,ing2)=>{
+  console.log(`Here is your pizza with ${ing1} and ${ing2}!`);
+},5000, ...ingre); // passing array as the argument using the spread operator.
+
+// async behaviour.
+console.log("waiting...");
+
+if(ingre.includes("onion")) clearTimeout(pizzaTimer); // To cancel the timeout before ot has been executed.
+
+//setInterval.
+setInterval(function(){
+  const now = new Date();
+  const hr = now.getHours();
+  const min = `${now.getMinutes()}`.padStart(2,"0");
+  const sec = `${now.getSeconds()}`.padStart(2,"0");
+  // console.log(`${hr}/${min}/${sec}`);
+  // labelTimer.textContent = `${hr}/${min}/${sec}`;
+  // const n = new Intl.DateTimeFormat("en-IN").format(now);
+  // console.log(n);
+},1000);
