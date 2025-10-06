@@ -258,3 +258,81 @@ document.querySelector(".nav__links").addEventListener("click",function(e){
   };
 
 });
+
+//DOM Traversing
+// console.log("---DOM Traversing---");
+
+// const h1 = document.querySelector("h1");
+
+// //Going downwards: selecting childs.
+// console.log(h1.querySelectorAll(".highlight"));
+// console.log(h1.childNodes);
+// console.log(h1.children);
+// h1.firstElementChild.style.color = "white";
+// h1.lastElementChild.style.color = "white";
+
+// // Going upwards: selecting parents.
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
+
+// h1.closest(".header").style.background = "var(--gradient-secondary)";
+
+// h1.closest("h1").style.background = "var(--gradient-primary)";
+
+// //  Going sideways: selecting Siblings.
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+
+// console.log(h1.parentElement.children);
+
+// [...h1.parentElement.children].forEach(function(el){
+//   if(el !== h1){
+//     el.style.transform = "scale(0.5)"
+//   };
+// });
+
+//Building a Tabbed Component
+console.log("---Building a Tabbed Component---");
+
+const tabs = document.querySelectorAll(".operations__tab");
+const tabsContainer = document.querySelector(".operations__tab-container");
+const tabsContent = document.querySelectorAll(".operations__content");
+
+// tabs.forEach(t=>t.addEventListener("click",()=>console.log("TAB")));
+// This here is a bad practice.
+
+// We will use event Delegation instead.
+
+tabsContainer.addEventListener("click",function(e){
+  const clicked = e.target.closest(".operations__tab"); // We used this because we were getting error/mistake like we were getting diffrent element when clicked the number inside the button so we didnt want ed that so we goided that to the button itself and now when clicking on the button or the number we get the target of the button which we clicked on.
+  console.log(clicked);
+
+  // Guard clause.
+  if(!clicked) return; // This is for if theres no clicked element, means like if we clicked outside the button but in that same section then we get an error cause we dont have or match anything with the class name ".operations__tab" so to fix that we return nothing like that.
+
+  // To active the "operations__tab--active" on only at one and not other, so we firstly have to remove all the "operations__tab--active" from the button. Then we apply it to the button we clicked.
+  tabs.forEach(t=> t.classList.remove("operations__tab--active"));
+  tabsContent.forEach(c=>c.classList.remove("operations__content--active"));
+
+  clicked.classList.add("operations__tab--active");
+
+  // Activate the content part.
+  console.log(clicked.dataset.tab);
+  document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add("operations__content--active");
+
+//   Steps:
+
+// Add event listener to the parent container
+
+// Use e.target.closest() to find the actual clicked element
+
+// Use a guard clause (if (!clicked) return;)
+
+// Remove “active” classes from all elements
+
+// Add “active” class to the clicked element and its matching content
+
+});
