@@ -8,6 +8,7 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const nav = document.querySelector(".nav");
 
 const openModal = function (e) {
   e.preventDefault(); // this is because when we clicked on th open account button it would pop to the top, the window so to prevent that we used this. It was because of the link and hyperlink used in the html of that button.
@@ -335,4 +336,120 @@ tabsContainer.addEventListener("click",function(e){
 
 // Add “active” class to the clicked element and its matching content
 
+});
+
+//Passing Arguments to Event Handlers
+console.log("---Passing Arguments to Event Handlers---");
+
+// Top buttons fade animations.
+
+const handleHover = function(e){
+ if(e.target.classList.contains("nav__link")){
+      const link = e.target;
+      const siblings = link.closest(".nav").querySelectorAll(".nav__link");
+      const logo = link.closest(".nav").querySelector("img");
+
+      siblings.forEach(el => {if(el !== link) el.style.opacity = this});
+      logo.style.opacity = this;
+    };
+}
+// nav.addEventListener('mouseover',handleHover(e,0.5)); // This wont work.
+
+// nav.addEventListener('mouseover',function(e){
+//     handleHover(e,0.5);
+// });
+
+// nav.addEventListener('mouseout',function(e){
+//    handleHover(e,1);
+// });
+
+// By using .bind
+// Passing an "argument" into handler.
+nav.addEventListener("mouseover",handleHover.bind(0.5));
+nav.addEventListener("mouseout",handleHover.bind(1));
+
+//Implementing a Sticky Navigation: The Scroll Event
+console.log("---Implementing a Sticky Navigation: The Scroll Event---");
+// This means the top navigation bar should be fixed when we scroll to top or bottom.
+
+// const initialCoords = section1.getBoundingClientRect()
+// console.log(initialCoords);
+
+// // But this "scroll" event here is a bad way/not a good way.
+// window.addEventListener("scroll", function(){
+//   // console.log(window.scrollY);
+
+//   if(window.scrollY > initialCoords.top) nav.classList.add("sticky")
+//      else nav.classList.remove("sticky");
+// });
+
+//A Better Way: The Intersection Observer API
+console.log("---A Better Way: The Intersection Observer API---");
+// This api observes the element or the section changes relative to the viewport.
+
+// const obsCallback = function(entries,observer){
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   })
+// };
+
+// const obsOptions = {
+//   root: null,
+//   threshold: [0,0.2], // this value here states that, when it trigggers. means when "0" then it will trigger if the section1 is completely out of the viewport, and "0.2 or 0.3 .." means that 20% or 30% of the section1 visible or comes or goes out of the screen/viewport then it will trigger it.
+// };
+
+// const observer = new IntersectionObserver(obsCallback,obsOptions);
+// observer.observe(section1);
+
+const header = document.querySelector(".header");
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav =  function(entries,observer){
+  const [entry] = entries; // is same as entries[0];
+  // console.log(entry);
+  if(!entry.isIntersecting) nav.classList.add("sticky");
+  
+    else nav.classList.remove("sticky");
+  };
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root:null,
+  threshold: 0,
+  // rootMargin: "-90px", // Manual way.
+  rootMargin: `-${navHeight}px`, // This means that we are shifting the section line or the point where the function or the threshold activates so "-90" means -90px above the threshold point there it will be activated.
+});
+headerObserver.observe(header);
+
+// Revealing Elements on Scroll
+console.log("---Revealing Elements on Scroll---");
+
+// So basically theres a class in all the sections 1 2 3 4 so it just hides the section by opacity: 0 and when we remove the class it translates itself a little to the y axis to give it a little animation while scrolling. 
+// So now what we just have to remove that class while we scroll downwards to those sections and make them appear.
+
+
+const allSections = document.querySelectorAll(".section");
+
+const revealSection = function(entries,observer){
+  console.log(entries);
+  // const [entry] = entries;
+  entries.forEach(entry => {
+
+    console.log(entry);
+    
+    if(!entry.isIntersecting) return;
+    
+    entry.target.classList.remove("section--hidden");
+    
+    observer.unobserve(entry.target)
+  });
+};
+
+const sectionObserver = new IntersectionObserver(revealSection,{
+  root:null, // viewport.
+  threshold: 0.15,
+});
+
+allSections.forEach(function(section){
+  sectionObserver.observe(section);
+  section.classList.add("section--hidden")
 });
