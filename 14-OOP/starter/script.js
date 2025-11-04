@@ -688,7 +688,7 @@ const movements = acc2
     .withdraw(200)
     .requestLoan(5000)
     .deposit(500)
-    .getMovements(); // But can be placed at the end and it wil;l work.
+    .getMovements(); // But can be placed at the end and it will work.
 
     console.log(acc2);
     console.log(movements);
