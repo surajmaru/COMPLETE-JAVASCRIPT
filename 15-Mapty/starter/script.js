@@ -1,7 +1,6 @@
 'use strict';
 
 // prettier-ignore
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
@@ -19,6 +18,7 @@ class Workout{
     // This is the new method we are doing below "cutting edge javascript" and its not yet part of the javascript itself.
     date = new Date();
     id = (Date.now() + "").slice(-10);
+    clicks = 0;
     
     constructor(coords, distance, duration){
         // this.date = ...
@@ -26,6 +26,15 @@ class Workout{
         this.coords = coords; // [lat, long]
         this.distance = distance;
         this.duration = duration;
+    }
+    _setDescription(){
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`
+
+    }
+    click(){
+        this.clicks++;
     }
 };
 
@@ -35,6 +44,7 @@ class Running extends Workout {
         super(coords,distance,duration);
         this.cadence = cadence;
         this.calcPace();
+        this._setDescription();
 
     }
 
@@ -50,6 +60,7 @@ class Cycling extends Workout {
         super(coords,distance,duration);
         this.elevationGain = elevationGain;
         this.calcSpeed();
+        this._setDescription();
     }
 
     calcSpeed(){
@@ -71,15 +82,23 @@ class App {
     #map;
     #mapEvent;
     #workout = [];
+    #mapZoomLevel = 13;
+   
 
     constructor(){
         this._getPosition(); // Here we did that.
         // This is a eventHandler so we can directly write it here cause the constructor will load and runn this eventHandler as soon as the page loads.
+
+        // Get data from localStorage
+        this._getLocalStorage();
+
         form.addEventListener("submit", this._newWorkout.bind(this)); 
         // Here using "this" directly will point to the "form" cause this is a eventHandler and not to the class so, again we will use the "bind" method.
 
         // Same goes for this eventHandler too.
         inputType.addEventListener("change", this._toggleElevationField);
+
+        containerWorkouts.addEventListener("click", this._moveToPopup.bind(this))
     }
 
     _getPosition(){
@@ -100,7 +119,7 @@ class App {
 
         const coords = [latitude,longitude]
 
-            this.#map = L.map('map').setView(coords, 13);
+            this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
         
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -110,6 +129,10 @@ class App {
         console.log(map);
         this.#map.on("click", this._showForm.bind(this)); 
         // Here also like the "this" will point to this eventHandler so, we have to manually bind the this.
+
+        this.#workout.forEach(work => {
+            this._renderWorkoutMarker(work)
+            });
         
     }
     
@@ -126,6 +149,13 @@ class App {
          inputElevation.closest(".form__row").classList.toggle("form__row--hidden");
 
         inputCadence.closest(".form__row").classList.toggle("form__row--hidden");
+    }
+
+    _hideForm(){
+        // Clear the input fields.
+        inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = "";
+        form.classList.add("hidden");
+        
     }
 
     _newWorkout(e){
@@ -187,16 +217,17 @@ class App {
         this._renderWorkoutMarker(workout);
         
         // Render workout on the list.
+        this._renderWorkout(workout);
         
         // Hide the form + clear the input fields.
-        
-        // Clear the input fields.
-        inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = "";
+        this._hideForm();
+
+        // Set localStorage.
+        this._setLocalStorage();
         
     }
     
     _renderWorkoutMarker(workout){
-        console.log(this.#mapEvent);
          L.marker(workout.coords)
         .addTo(this.#map)
         .bindPopup(L.popup({
@@ -206,11 +237,103 @@ class App {
             closeOnClick:false,
             className: `${workout.type}-popup`
         }))
-        .setPopupContent(workout.type)
+        .setPopupContent(`${workout.type === "running" ? "🏃‍♂️" : "🚴‍♀️"} ${workout.description}`)
         .openPopup();
     }
 
-}
+    _renderWorkout(workout){
+        let html = `
+            <li class="workout workout--${workout.type}" data-id="${workout.id}">
+          <h2 class="workout__title">${workout.description}</h2>
+          <div class="workout__details">
+            <span class="workout__icon">${workout.type === "running" ? "🏃‍♂️" : "🚴‍♀️"}</span>
+            <span class="workout__value">${workout.distance}</span>
+            <span class="workout__unit">km</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⏱</span>
+            <span class="workout__value">${workout.duration}</span>
+            <span class="workout__unit">min</span>
+          </div>
+
+        `;
+
+        if(workout.type === "running")
+            html += `
+                    <div class="workout__details">
+            <span class="workout__icon">⚡️</span>
+            <span class="workout__value">${workout.pace.toFixed(1)}</span>
+            <span class="workout__unit">min/km</span>
+            </div>
+            <div class="workout__details">
+            <span class="workout__icon">🦶🏼</span>
+            <span class="workout__value">${workout.cadence}</span>
+            <span class="workout__unit">spm</span>
+            </div>
+            </li>
+            `
+        
+        
+        if(workout.type === "cycling")
+            html += `
+            <div class="workout__details">
+            <span class="workout__icon">⚡️</span>
+            <span class="workout__value">${workout.speed.toFixed(1)}</span>
+            <span class="workout__unit">km/h</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⛰</span>
+            <span class="workout__value">${workout.elevationGain}</span>
+            <span class="workout__unit">m</span>
+          </div>
+            </li>
+            `;
+
+            form.insertAdjacentHTML("afterend",html);
+        }
+
+        _moveToPopup(e){
+            const workoutEl = e.target.closest(".workout");
+            console.log(workoutEl);
+
+            if(!workoutEl) return;
+
+            const workout = this.#workout.find(work => work.id === workoutEl.dataset.id);
+            console.log(workout);
+            console.log(this.#workout);
+
+            this.#map.setView(workout.coords, this.#mapZoomLevel,{
+                animate: true,
+                pan: {
+                    duration:1
+                }
+            });
+            // workout.click();
+        }
+
+        _setLocalStorage(){
+            localStorage.setItem("workouts", JSON.stringify(this.#workout))
+        }
+
+        _getLocalStorage(){
+            const data = JSON.parse(localStorage.getItem("workouts"));
+            console.log(data);
+
+            if(!data) return;
+
+            this.#workout = data;
+
+            this.#workout.forEach(work => {
+                this._renderWorkout(work);                
+            });
+        }
+
+        resetLocalStorage(){
+            localStorage.removeItem("workouts");
+            location.reload();
+            // If you wanna reset the local storage then just type this "app.resetLocalStorage()" in the console and hit enter.
+        }
+    }
 // We created the app object from the App class.
 const app = new App();
 // app._getPosition();
@@ -221,7 +344,7 @@ const app = new App();
 // So here we just took out previous code and organised it into a good class based structure and thats it.
 
 
-// Chat gpt link to understand everything:- "https://chatgpt.com/share/690e08ef-6b58-8002-8fa7-aab3d53c621f" 
+// Chat gpt link to understand everything:- "https://chatgpt.com/share/690f3cc4-3c04-8002-a55f-29fb14819445"  
 
 
 /////////////////////////////////////////////////////////
