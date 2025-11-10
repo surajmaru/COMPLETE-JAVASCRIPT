@@ -11,6 +11,8 @@ const inputElevation = document.querySelector('.form__input--elevation');
 const editBtn = document.querySelector(".btn_edit");
 const deleteBtn = document.querySelector(".btn_delete");
 const deleteAllBtn = document.querySelector(".btn_deleteall");
+const select = document.querySelector("#catagory");
+console.log(select); 
 //  let map, mapEvent; // Creating global variable cause to use it in other events and functions.
 
 // Managing Workout Data: Creating Classes
@@ -111,7 +113,9 @@ class App {
 
         editBtn.addEventListener("click", this._editWorkout.bind(this));
         deleteBtn.addEventListener("click", this._deleteWorkout.bind(this));
-        deleteAllBtn.addEventListener("click", this._deleteAllWorkout.bind(this)); 
+        deleteAllBtn.addEventListener("click", this._deleteAllWorkout.bind(this));
+        select.addEventListener("click",this._catagorize.bind(this));
+
     }
 
     _getPosition(){
@@ -498,7 +502,7 @@ class App {
            console.log(this.#workout);
            const allWorkouts = document.querySelectorAll(".workout");
            allWorkouts.forEach(workout=>{
-            workout.classList.add("delete-mode")  
+            workout.classList.add("delete-mode")
            })
         }
         _deleteWorlout2(e){
@@ -560,6 +564,118 @@ class App {
                 alert("❌ Deletion cancelled.");
             }
         }
+
+        _catagorize(){
+            if(select.value === "latest"){
+                console.log(select.value);
+                console.log(this.#workout);
+
+                // Removing and Re-rendering the workouts on the list (only on the ui not on the array).
+                const workoutEl = document.querySelectorAll(".workout");
+                workoutEl.forEach(el => el.remove());
+                this.#workout.forEach(work => this._renderWorkout(work));
+            }
+
+            if(select.value === "distance"){
+                console.log(select.value);
+
+                const distances = this.#workout.map(obj => obj.distance);
+                console.log(distances);
+
+                // Sorting the workouts but the "distance" and not changing the original array.
+                const sorted = [...this.#workout].sort((a,b) => a.distance - b.distance);
+                console.log(sorted);
+
+                // Removing the old workouts (only from UI not array).
+                const workoutEl = document.querySelectorAll(".workout");
+                workoutEl.forEach(el => el.remove());
+
+                // containerWorkouts.innerHTML = "";
+
+                // Re-rendering the new sorted workouts.
+                sorted.forEach(work => this._renderWorkout(work));
+            }
+
+            if(select.value === "duration"){
+                console.log(select.value);
+
+                const durations = this.#workout.map(obj => obj.duration);
+                console.log(durations);
+
+                // Sorting the workouts but the "duration" and not changing the original array.
+                const sorted = [...this.#workout].sort((a,b) => a.duration - b.duration);
+                console.log(sorted);
+
+                // Removing the old workouts (only from UI not array).
+                const workoutEl = document.querySelectorAll(".workout");
+                workoutEl.forEach(el => el.remove());
+
+                // containerWorkouts.innerHTML = "";
+
+                // Re-rendering the new sorted workouts.
+                sorted.forEach(work => this._renderWorkout(work));
+            }
+
+            if(select.value === "cadence"){ 
+                // Filtering only the running workouts.
+                console.log(select.value);
+                const runningWorkouts = this.#workout.filter(w => w.type === "running");                
+                // Taking out buy its "cadence" property.
+                const cadences = runningWorkouts.map(obj => obj.cadence);
+                console.log(cadences);
+                // Sorting the workouts buy its "cadence". And also not modifying the original array.
+                const sorted = [...runningWorkouts].sort((a,b) => a.cadence - b.cadence);
+                console.log(sorted);
+                // Removing the old list (only from UI not array).
+                const workoutEl = document.querySelectorAll(".workout");
+                workoutEl.forEach(el => el.remove());
+                // Filtering the "cycling" workout and removing it from the list.
+                const cyclingWorkouts = this.#workout.filter(w => w.type === "cycling");
+                console.log(cyclingWorkouts);
+                
+                cyclingWorkouts.forEach(cy => {
+                    const el = document.querySelector(`.workout[data-id="${cy.id}"]`);
+                    if(el) el.remove();
+                });
+
+                // containerWorkouts.innerHTML = "";
+
+                // re-rendering the new sorted workouts.
+                sorted.forEach(work => this._renderWorkout(work));
+                
+            }
+
+            if(select.value === "elevationgain"){
+                // Filtering only the cycling workouts.
+                console.log(select.value);
+                const cyclingWorkouts = this.#workout.filter(w => w.type === "cycling");
+                // Taking out buy its "elevationGain" property.
+                const elevationGains = cyclingWorkouts.map(obj => obj.elevationGain);
+                console.log(elevationGains);
+                // Sorting the workouts buy its "elevationGain". And also not modifying the original array.
+                const sorted = [...cyclingWorkouts].sort((a,b) => a.elevationGain - b.elevationGain);
+                console.log(sorted);
+                // Removing the old list (only from UI not array).
+                const workoutEl = document.querySelectorAll(".workout");
+                workoutEl.forEach(el => el.remove());
+                // Filtering the "running" workout and removing it from the list.
+                 const runningWorkouts = this.#workout.filter(w => w.type === "running");
+                console.log(runningWorkouts);
+                
+                runningWorkouts.forEach(cy => {
+                    const el = document.querySelector(`.workout[data-id="${cy.id}"]`);
+                    if(el) el.remove();
+                });
+
+                // containerWorkouts.innerHTML = "";
+
+                // re-rendering the new sorted workouts.
+                sorted.forEach(work => this._renderWorkout(work));
+                
+            }
+                
+        }
+
     }
 // We created the app object from the App class.
 const app = new App();

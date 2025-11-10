@@ -28,7 +28,7 @@ body {
   height: 100vh;
   overscroll-behavior-y: none;
 
-  background-color: #fff;
+  background-color: black;
   padding: 2.5rem;
 
   display: flex;
@@ -47,6 +47,8 @@ a:visited {
   padding: 3rem 5rem 4rem 5rem;
   display: flex;
   flex-direction: column;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 .logo {
@@ -60,6 +62,7 @@ a:visited {
   height: 77vh;
   overflow-y: scroll;
   overflow-x: hidden;
+  margin-top: 30px;
 }
 
 .workouts::-webkit-scrollbar {
@@ -220,6 +223,11 @@ a:visited {
   border-left: 5px solid var(--color-brand--1);
 }
 
+.leaflet-container{
+  border-top-right-radius: 10px; 
+  border-bottom-right-radius: 10px; 
+}
+
 .btn-div{
   display: flex;
   align-items: center;
@@ -248,4 +256,22 @@ a:visited {
 
 .delete-mode{
   opacity: 0.5;
+}
+
+.drop-div{
+  display: flex;
+  align-items: center;
+  
+}
+
+.dropdown{
+  border-radius: 10px;
+  width: 14rem;
+  height: 35px;
+  padding-left: 15px;
+  background-color: #42484d;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
 }
