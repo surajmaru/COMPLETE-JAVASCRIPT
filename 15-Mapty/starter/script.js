@@ -12,6 +12,8 @@ const editBtn = document.querySelector(".btn_edit");
 const deleteBtn = document.querySelector(".btn_delete");
 const deleteAllBtn = document.querySelector(".btn_deleteall");
 const select = document.querySelector("#catagory");
+const deleteAllDropdown = document.querySelector("#deleteall");
+const myForm = document.querySelector(".myform");
 console.log(select); 
 //  let map, mapEvent; // Creating global variable cause to use it in other events and functions.
 
@@ -115,6 +117,7 @@ class App {
         deleteBtn.addEventListener("click", this._deleteWorkout.bind(this));
         deleteAllBtn.addEventListener("click", this._deleteAllWorkout.bind(this));
         select.addEventListener("click",this._catagorize.bind(this));
+        deleteAllDropdown.addEventListener("click",this._deleteAllWorkout.bind(this));
 
     }
 
@@ -544,10 +547,13 @@ class App {
         // Deleting all workout logic.
         _deleteAllWorkout(){
             this.#deleteMode = true;
+            document.querySelector(".delete-workout").classList.remove("hidden");
+            // console.log(deleteAllDropdown.value);
 
-            const confirmation = prompt("Are you sure? yes or no");
+            // const confirmation = prompt("Are you sure? yes or no");
 
-            if(confirmation && confirmation.toLowerCase() === "yes"){
+            if(deleteAllDropdown.value === "yes"){
+                if(this.#workout.length > 0){
                 this.#workout = [];
 
                 const workoutEl = document.querySelectorAll(".workout");
@@ -559,10 +565,29 @@ class App {
 
                 this._setLocalStorage();
 
+                document.querySelector(".delete-workout").classList.add("hidden");
+                myForm.reset();
                 this.#deleteMode = false;
-            } else {
-                alert("❌ Deletion cancelled.");
+            } else{
+                alert("There is no workout to delete!!!");
+                myForm.reset();
+                document.querySelector(".delete-workout").classList.add("hidden");
             }
+                
+
+            } 
+            if (deleteAllDropdown.value === "no"){
+                if(this.#workout.length > 0){
+                alert("❌ Deletion cancelled.");
+                myForm.reset();
+                document.querySelector(".delete-workout").classList.add("hidden");
+            }  else{
+                alert("There is no workout to delete!!!");
+                myForm.reset();
+                document.querySelector(".delete-workout").classList.add("hidden");
+            }
+        
+        }
         }
 
         _catagorize(){
