@@ -712,7 +712,7 @@ const app = new App();
 // So here we just took out previous code and organised it into a good class based structure and thats it.
 
 
-// Chat gpt link to understand everything:- "https://chatgpt.com/share/690f3cc4-3c04-8002-a55f-29fb14819445"  
+// Chat gpt link to understand everything:- "https://chatgpt.com/share/6913a04d-f330-8002-9604-a6b7ab2955f9"   
 
 
 /////////////////////////////////////////////////////////
