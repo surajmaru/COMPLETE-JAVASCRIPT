@@ -149,8 +149,8 @@ console.log("---Promises and the Fetch API---");
 // request.send();
 
 // Promises.
-const request = fetch("https://restcountries.com/v2/name/portugal");
-console.log(request);
+// const request = fetch("https://restcountries.com/v2/name/portugal");
+// console.log(request);
 
 // const getCountryData = function(country){
 //  fetch(`https://restcountries.com/v2/name/${country}`) // Here it reutrns a promise.
@@ -249,44 +249,44 @@ console.log("---Handling Rejected Promises---");
 // Throwing Errors Manually
 console.log("---Throwing Errors Manually--");
 
-const getJSON = function(url,errorMsg ="Something went wrong"){
- return fetch(url)
-  .then( response => {
-     if(!response.ok)
-    throw new Error(`${errorMsg} (${response.status})`)
+// const getJSON = function(url,errorMsg ="Something went wrong"){
+//  return fetch(url)
+//   .then( response => {
+//      if(!response.ok)
+//     throw new Error(`${errorMsg} (${response.status})`)
 
-    return response.json()
-})
-}
+//     return response.json()
+// })
+// }
 
-const getCountryData = function(country){
-  // country 1
-  getJSON(`https://restcountries.com/v2/name/${country}`, "Country not found")
- .then(data => {
-     renderCountry(data[0]);
-     const neighbour = data[0].borders?.[0];
-    // const neighbour = "dfg";
+// const getCountryData = function(country){
+//   // country 1
+//   getJSON(`https://restcountries.com/v2/name/${country}`, "Country not found")
+//  .then(data => {
+//      renderCountry(data[0]);
+//      const neighbour = data[0].borders?.[0];
+//     // const neighbour = "dfg";
 
-     if(!neighbour) 
-      throw new Error("No neighbour found!")
-     // Country 2
-    return getJSON(`https://restcountries.com/v2/alpha/${neighbour}`, `Neighbouring Country not found`)
+//      if(!neighbour) 
+//       throw new Error("No neighbour found!")
+//      // Country 2
+//     return getJSON(`https://restcountries.com/v2/alpha/${neighbour}`, `Neighbouring Country not found`)
  
-  })
-     .then(data => renderCountry(data,"neighbour"))
-     .catch(err => {
-      console.error(`${err} BOOM`)
-      renderError(`Something went wrong... ${err.message}. Try again!`)
-    })
-    .finally(()=>{
-       countriesContainer.style.opacity = 1;
-    })
-  };
+//   })
+//      .then(data => renderCountry(data,"neighbour"))
+//      .catch(err => {
+//       console.error(`${err} BOOM`)
+//       renderError(`Something went wrong... ${err.message}. Try again!`)
+//     })
+//     .finally(()=>{
+//        countriesContainer.style.opacity = 1;
+//     })
+//   };
 
-btn.addEventListener("click",function(){
-  getCountryData("portugal");
-  // getCountryData("iceland");
-});
+// btn.addEventListener("click",function(){
+//   getCountryData("portugal");
+//   // getCountryData("iceland");
+// });
 // getCountryData("dfg")
 
 // CHALLENGE #1
@@ -316,8 +316,135 @@ TEST COORDINATES 2: -33.933, 18.474
 GOOD LUCK 😀
 */
 
-const whereAmI = function(lat,lng){
-  fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`)
+// const whereAmI = function(lat,lng){
+//   fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`)
+//   .then(response => {
+//     if(!response.ok) 
+//       throw new Error(`Problem with geocoding ${response.status}`)
+//     return response.json()
+//   })
+//   .then(data => {
+//     // console.log(data)
+//     // console.log(data.city);
+//     const city = data.city;
+//     const code = data.countryCode;
+
+//     console.log(`You are in ${city}, ${data.countryName}`);
+
+//     return fetch(`https://restcountries.com/v2/name/${data.countryName}`)
+//   }).then(res => {
+//       if(!res.ok) 
+//         throw new Error(`country not found (${res.status})`)
+//       return res.json();
+//     })
+//     .then(data =>renderCountry(data[0]))
+//     .catch(err=>console.log(`${err.message}`))
+// }
+
+// whereAmI(52.508, 13.381);
+// whereAmI(19.037, 72.873);
+// whereAmI(-33.933, 18.474);
+// whereAmI(-33.933, 13458.474);
+
+// Asynchronous Behind the Scenes: The Event Loop
+console.log("---Asynchronous Behind the Scenes: The Event Loop---");
+// Theory
+
+// The Event Loop in Practice
+// console.log("---The Event Loop in Practice--");
+
+// console.log("test start");
+// setTimeout(()=>console.log("0 sec timer"),0);
+// Promise.resolve("resolved promise 1").then(res => console.log(res));
+
+// Promise.resolve("resolved promise 2").then(res=>{
+//   // for(let i =0; i< 10000000000; i++){}
+//   console.log(res)
+// })
+// console.log("test end"); 
+
+// OUTPUT order:-
+// test start
+// test end
+// resolved promise 1
+// 0 sec timer
+
+//  Building a Simple Promise
+console.log("--- Building a Simple Promise---");
+
+// const lotteryPromise = new Promise(function(resolve,reject){
+  
+//   console.log("lottery draw is happening");
+//   setTimeout(function(){
+//     if(Math.random() >= 0.5){
+//       resolve("you WIN");
+//     } else{
+//       // reject(new Error("you LOSE"));
+//       reject("you LOSE");
+//     }
+//   },5000)
+
+// });
+
+// lotteryPromise
+// .then(res=>console.log(res))
+// .catch(err => console.log(err))
+// .catch(err => console.error(err));
+
+// Promisifying setTimeout.
+console.log("---Promisifying setTimeout---");
+// const wait = function(seconds){
+//   return new Promise(resolve=>{
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// wait(1)
+// .then(()=>{
+//   console.log("1 seconds passed");
+//   return wait(1);
+// })
+// .then(()=>{
+//   console.log("2 seconds passed");
+//   return wait(1);
+// })
+// .then(()=>{
+//   console.log("3 seconds passed");
+//   return wait(1);
+// })
+// .then(()=>{
+//   console.log("4 seconds passed");
+// })
+
+// Promise.resolve("abcd").then(x=>console.log(x));
+// Promise.reject(new Error("Problem!")).catch(x=>console.error(x));
+
+// Promisifying the Geolocation API
+console.log("---Promisifying the Geolocation API---");
+
+const getPosition = function(){
+  return new Promise((resolve,reject)=>{
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position), 
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve,
+      reject); // This is the same as the above.
+  });
+};
+
+// getPosition()
+// .then(pos => console.log(pos))
+// .catch(err => console.log(err))
+
+////////////////////////////////////////////
+
+const whereAmI = function(){
+
+  getPosition().then(pos => {
+    const {latitude:lat,longitude:lng} = pos.coords;
+    return fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`)
+  })
   .then(response => {
     if(!response.ok) 
       throw new Error(`Problem with geocoding ${response.status}`)
@@ -341,7 +468,4 @@ const whereAmI = function(lat,lng){
     .catch(err=>console.log(`${err.message}`))
 }
 
-whereAmI(52.508, 13.381);
-whereAmI(19.037, 72.873);
-whereAmI(-33.933, 18.474);
-// whereAmI(-33.933, 13458.474);
+btn.addEventListener("click",whereAmI);
