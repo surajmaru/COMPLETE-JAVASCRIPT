@@ -166,3 +166,24 @@ if(module.hot){
 // Configuring Babel and Polyfilling
 console.log("---Configuring Babel and Polyfilling---");
 
+// We can see "babel" in action here and compare this same code in the script file inside the "dist/" folder.
+class Person{
+    greeting = "hey"
+    constructor(name){
+        this.name = name;
+        console.log(`${this.greeting}, ${this.name}`);
+    }
+}
+const suraj = new Person("suraj");
+
+console.log("suraj" ?? null);
+console.log(cart.find(el=>el.quantity >= 2 ));
+Promise.resolve("test").then(x=>console.log(x));
+
+// Polyfilling.
+import "core-js/stable";
+// import "core-js/stable/array/find"; // for only what we want.
+// import "core-js/stable/promise"; // for only what we want.
+
+// Polyfilling async functions.
+import "regenerator-runtime/runtime";
