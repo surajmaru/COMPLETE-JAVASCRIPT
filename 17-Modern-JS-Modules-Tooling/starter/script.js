@@ -29,12 +29,12 @@ console.log("---Exporting and Importing in ES6 Modules---");
 // console.log(tq);
 
 // Example of live connection between import and export files.
-import add, {cart} from "./shoppingCart.js";
-add("pizza" ,2);
-add("bread" ,20);
-add("apple" ,5);
+// import add, {cart} from "./shoppingCart.js";
+// add("pizza" ,2);
+// add("bread" ,20);
+// add("apple" ,5);
 
-console.log(cart);
+// console.log(cart);
 
 // Top-Level await (ES2022)
 console.log("---Top-Level await (ES2022)---");
@@ -128,20 +128,20 @@ console.log("---Introduction to NPM---");
 // Lodash is a popular JavaScript utility library that provides a large set of helpful functions to make working with arrays, objects, strings, numbers, and more much easier.
 
 // import cloneDeep  from "./node_modules/lodash-es/cloneDeep.js";
-import { cloneDeep } from "lodash-es";
+// import { cloneDeep } from "lodash-es";
 
-const state = {
-    cart: [
-        {product: "bread", quantity: 5},
-        {product: "pizza", quantity: 3}
-    ],
-    user: {loggedIn:true},
-}
-const stateClone = Object.assign({}, state);
-const stateDeepClone = cloneDeep(state);
-state.user.loggedIn = false;
-console.log(stateClone);
-console.log(stateDeepClone);
+// const state = {
+//     cart: [
+//         {product: "bread", quantity: 5},
+//         {product: "pizza", quantity: 3}
+//     ],
+//     user: {loggedIn:true},
+// }
+// const stateClone = Object.assign({}, state);
+// const stateDeepClone = cloneDeep(state);
+// state.user.loggedIn = false;
+// console.log(stateClone);
+// console.log(stateDeepClone);
 
 // So now the thing is that in our project we usually include lots of librarys and packages so the "node-module" folder has like 10s of thousands of of files and folders in it. 
 // so its just not optial to share the code and my whole project cause it will take time to load and transfer the whole node-modules.
@@ -152,9 +152,9 @@ console.log(stateDeepClone);
 // Bundling With Parcel and NPM Scripts
 console.log("---Bundling With Parcel and NPM Scripts---");
 
-if(module.hot){
-    module.hot.accept();
-}
+// if(module.hot){
+//     module.hot.accept();
+// }
 // npm i parcel --save-dev
 // npm i -g
 
@@ -167,23 +167,43 @@ if(module.hot){
 console.log("---Configuring Babel and Polyfilling---");
 
 // We can see "babel" in action here and compare this same code in the script file inside the "dist/" folder.
-class Person{
-    greeting = "hey"
-    constructor(name){
-        this.name = name;
-        console.log(`${this.greeting}, ${this.name}`);
-    }
-}
-const suraj = new Person("suraj");
+// class Person{
+//     greeting = "hey"
+//     constructor(name){
+//         this.name = name;
+//         console.log(`${this.greeting}, ${this.name}`);
+//     }
+// }
+// const suraj = new Person("suraj");
 
-console.log("suraj" ?? null);
-console.log(cart.find(el=>el.quantity >= 2 ));
-Promise.resolve("test").then(x=>console.log(x));
+// console.log("suraj" ?? null);
+// console.log(cart.find(el=>el.quantity >= 2 ));
+// Promise.resolve("test").then(x=>console.log(x));
 
 // Polyfilling.
-import "core-js/stable";
+// import "core-js/stable";
 // import "core-js/stable/array/find"; // for only what we want.
 // import "core-js/stable/promise"; // for only what we want.
 
 // Polyfilling async functions.
-import "regenerator-runtime/runtime";
+// import "regenerator-runtime/runtime";
+
+// Review: Writing Clean and Modern JavaScript
+console.log("---Review: Writing Clean and Modern JavaScript---");
+
+// Theory.
+
+// Let's Fix Some Bad Code: Part 1
+console.log("---Let's Fix Some Bad Code: Part 1---");
+
+// In clean.js
+
+// Declarative and Functional JavaScript Principles
+console.log("---Declarative and Functional JavaScript Principles---");
+
+// Theory.
+
+// Let's Fix Some Bad Code: Part 2
+console.log("---Let's Fix Some Bad Code: Part 2---");
+
+// In clean.js
