@@ -1,0 +1,13 @@
+# Node modules
+node_modules/
+
+# Parcel cache
+.cache/
+.parcel-cache/
+
+# Dist folder (Parcel build output)
+dist/
+
+# Optional
+# .DS_Store
+# .env
