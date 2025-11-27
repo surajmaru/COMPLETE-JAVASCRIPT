@@ -1,24 +1,24 @@
 import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
-
-// import icons from "../img/icons.svg"; // For prev parcel version v1
-// import icons from "url:../img/icons.svg"; // For latest..
+import SearchView from "./views/searchView.js";
+import ResultsView from "./views/resultsView.js";
 import "core-js/stable"; // For polyfilling everything else.
 import "regenerator-runtime/runtime"; // For polyfilling async/await
+import searchView from "./views/searchView.js";
+import resultsView from "./views/resultsView.js";
 
-const recipeContainer = document.querySelector('.recipe');
+// if(module.hot){
+//   module.hot.accept();
+// } 
+// Because of this, when we save we can see the page doesnt reloads. And the state remains.(only when i save the code here and its connected to live server or parcel).
+// ( when we manually reload the browser then it obvously reloads )
 
-
-// NEW API URL (instead of the one shown in the video)
-// https://forkify-api.jonas.io
-
-///////////////////////////////////////
 
 // function
 const controlRecipes = async function(){
   try{
     const id = window.location.hash.slice(1); // For taking the id out of the url.
-    console.log(id);
+    // console.log(id);
 
     if(!id) return; // Guard clause if theres no id on the url.
     recipeView.renderSpinner();
@@ -36,7 +36,29 @@ const controlRecipes = async function(){
     // UPDATE:- now we dont pass anything into the renerError method because we manually have set the error as a private field in the recipeView file and we have directly passed that.
 };
 
+  const controlSearchResults = async function(){
+
+  try{
+    ResultsView.renderSpinner();
+
+    // 1: Get search query.
+    const query = searchView.getQuery();
+    if(!query) return;
+
+    // 2: load search.
+    await model.loadSearchResults(query);
+
+    // 3: Render results
+    // resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
+  
+    } catch(err){
+    console.log(err);
+  }};
+
+
   const init = function(){
     recipeView.addHandlerRender(controlRecipes);
+    searchView.addHandlerSearch(controlSearchResults);
   };
 init();
