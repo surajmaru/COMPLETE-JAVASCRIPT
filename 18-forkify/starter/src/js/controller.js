@@ -6,6 +6,7 @@ import "core-js/stable"; // For polyfilling everything else.
 import "regenerator-runtime/runtime"; // For polyfilling async/await
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
+import paginationView from "./views/paginationView.js";
 
 // if(module.hot){
 //   module.hot.accept();
@@ -51,14 +52,25 @@ const controlRecipes = async function(){
     // 3: Render results
     // resultsView.render(model.state.search.results);
     resultsView.render(model.getSearchResultsPage());
-  
+
+    // 4: render initial pagination buttons
+    paginationView.render(model.state.search);
     } catch(err){
     console.log(err);
   }};
 
+  const controlPagination = function(gotoPage){
+    // 3: Render new results
+    // resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage(gotoPage));
+
+    // 4: render new pagination buttons
+    paginationView.render(model.state.search);
+  }
 
   const init = function(){
     recipeView.addHandlerRender(controlRecipes);
     searchView.addHandlerSearch(controlSearchResults);
+    paginationView.addHandlerClick(controlPagination);
   };
 init();
