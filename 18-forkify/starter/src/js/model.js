@@ -15,6 +15,7 @@ export const state = {
 export const loadRecipe = async function(id){
     try{
     const data = await getJSON(`${API_URL}${id}`);
+    console.log(data);
     
     const {recipe} = data.data; // Creating a new object from the apis object for our better understanding.
     state.recipe = {
@@ -29,7 +30,7 @@ export const loadRecipe = async function(id){
         
     };
     // console.log(data.data.recipe);
-    // console.log(state.recipe);
+    console.log(state.recipe);
     } catch(err){
         // Temp error handling
         console.log(`${err}💥💥💥`);
@@ -69,4 +70,13 @@ export const getSearchResultsPage = function(page = state.search.page) {
     const croppedArr = state.search.results.slice(start,end);
     // console.log(croppedArr);
     return croppedArr;
+};
+
+export const updateServings = function(newServings){
+    state.recipe.ingredients.forEach(ing => {
+        ing.quantity = ing.quantity * newServings / state.recipe.servings;
+        // newQt = oldQt * newServings / oldServings //
+    });
+
+    state.recipe.servings = newServings;
 };
