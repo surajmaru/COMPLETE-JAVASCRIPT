@@ -24,16 +24,20 @@ const controlRecipes = async function(){
     if(!id) return; // Guard clause if theres no id on the url.
     recipeView.renderSpinner();
 
+    // 0: update results view to mark selected search results.
+    resultsView.update(model.getSearchResultsPage());
+
     // 1: loading recipe..
     await model.loadRecipe(id);
     
     // 2: rendering recipe..
     recipeView.render(model.state.recipe);
 
+
     }catch(err){
       recipeView.renderError();
     }
-    // So the chain is like, in the recipeView.js we have a renderError method which just pushhes or just shows the error on the display, so we call that method here with passing the error.
+    // So the ERROR chain is like, in the recipeView.js we have a renderError method which just pushhes or just shows the error on the display, so we call that method here with passing the error.
     // Now,here as we are calling the loadRecipe function here, if theres an error in the loadRecipe funciton in the model.js then the promise returned from the function will still be resolved cause we were just console.logging it so here we would'nt trigger the catch block, so we manually throw the error in the loadRecipe function so the promise will be rejected and then here also we would get rejected promise so an error and that error will be catched here amd passed the error to the renderError method in the view(recipeView.js) and get displayed on the screen.
     // UPDATE:- now we dont pass anything into the renerError method because we manually have set the error as a private field in the recipeView file and we have directly passed that.
   };

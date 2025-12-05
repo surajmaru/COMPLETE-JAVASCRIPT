@@ -13,11 +13,12 @@ class ResultsView extends View {
        
     }
     _generateMarkupPreview(result){
+      const id = window.location.hash.slice(1);
         // console.log(result);
         // Here because of the hash id, whenever we click on the item then the hash chnages in the window and the recipe is loaded according to it.
          return `
             <li class="preview">
-            <a class="preview__link" href="#${result.id}">
+            <a class="preview__link ${result.id === id ? "preview__link--active" : ""}" href="#${result.id}">
               <figure class="preview__fig">
                 <img src="${result.image}" alt="${result.title}" />
               </figure>

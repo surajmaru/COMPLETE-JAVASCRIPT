@@ -13,15 +13,44 @@ export default class View {
  
         };
 
+        // Developing a DOM Updating Algorithm
         update(data){
-          if(!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
-
+          
           this._data = data;
           const newMarkup = this._generateMarkup();
 
           const newDom = document.createRange().createContextualFragment(newMarkup);
-          const newElement = newDom.querySelectorAll("*");
-          console.log(newElement);
+          const newElements = Array.from(newDom.querySelectorAll("*"));
+          const curElements = Array.from(this._parentElement.querySelectorAll("*"));
+          // console.log(curElements);
+          // console.log(newElements);
+
+          // This is important here..
+          newElements.forEach((newEl, i) => {
+            const curEl = curElements[i];
+            console.log(curEl, newEl.isEqualNode(curEl));
+            // We are comparing them both.
+            // We are checking here that the array which contains the new dom and its elements are equal to the original unchanged dom. 
+            // So we are just comparing the 2 doms new updated one and the old original one.
+            // So if both the elements in both the doms are same (one by one checking) then it will give true and if some of the elements are not same then it will return false.
+            // So on that basis we can figure out which element we have to update on the dom and not the whole html again. Only the changed one !
+
+            // Updates changed text
+            if(!newEl.isEqualNode(curEl) 
+              && newEl.firstChild.nodeValue.trim() !== ""){
+              console.log(newEl.firstChild?.nodeValue.trim());
+              curEl.textContent = newEl.textContent;
+            };
+
+            // Update changed attributes
+            if(!newEl.isEqualNode(curEl)){
+              console.log(newEl.attributes);
+              console.log(Array.from(newEl.attributes));
+              Array.from(newEl.attributes).forEach(attr =>
+               { console.log(attr)
+                curEl.setAttribute(attr.name , attr.value)})
+            };
+          });
         };
         
         _clear(){
