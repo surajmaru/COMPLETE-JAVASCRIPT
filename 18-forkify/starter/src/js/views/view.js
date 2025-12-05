@@ -28,6 +28,7 @@ export default class View {
             this._parentElement.innerHTML = "";
         };
     
+        
         // rendering the loading spinner..
         renderSpinner(){
             const markup = `
