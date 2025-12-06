@@ -23,3 +23,27 @@ export const getJSON = async function(url){
     }
     
 };
+
+export const sendJSON = async function(url, uploadData){
+    try{
+        const fetchPro = fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(uploadData),
+        });
+        
+        const res = await Promise.race([fetchPro, timeout(TIMEOUT_SECONDS)]);
+        const data = await res.json();
+        
+        if(!res.ok) throw new Error(`${data.message} (${res.status})`);
+        return data;
+
+    } catch(err){
+        // console.log(err); // Here if there was an error then this returned value by this function would still be resolved.
+        throw err; // But with this , now it will reject the promise returned by the getJSON funciton.
+    }
+    
+};
+
