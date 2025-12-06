@@ -1,2 +1,2 @@
-# This is my complete javascript from 0 to advance level, with covering everything.
+# This is my complete Javascript from Zero to Advance level, I finished everything which was taught in this course, learned a lot and now pretty confident with my Javascript Skills. :)
 ## Thanks to Jonas Schmedtmann for providing just a great javascript course ❤️
