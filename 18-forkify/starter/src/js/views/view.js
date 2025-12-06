@@ -3,11 +3,14 @@ import icons from "url:../../img/icons.svg";
 export default class View {
         _data;
 
-        render(data){
+        render(data, render = true ){
             if(!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
 
             this._data = data;
             const markup = this._generateMarkup();
+
+            if(!render) return markup;
+
             this._clear();
             this._parentElement.insertAdjacentHTML("afterbegin", markup);
  
@@ -28,7 +31,7 @@ export default class View {
           // This is important here..
           newElements.forEach((newEl, i) => {
             const curEl = curElements[i];
-            console.log(curEl, newEl.isEqualNode(curEl));
+            // console.log(curEl, newEl.isEqualNode(curEl));
             // We are comparing them both.
             // We are checking here that the array which contains the new dom and its elements are equal to the original unchanged dom. 
             // So we are just comparing the 2 doms new updated one and the old original one.
@@ -37,17 +40,17 @@ export default class View {
 
             // Updates changed text
             if(!newEl.isEqualNode(curEl) 
-              && newEl.firstChild.nodeValue.trim() !== ""){
-              console.log(newEl.firstChild?.nodeValue.trim());
+              && newEl.firstChild?.nodeValue.trim() !== ""){
               curEl.textContent = newEl.textContent;
             };
 
             // Update changed attributes
             if(!newEl.isEqualNode(curEl)){
-              console.log(newEl.attributes);
-              console.log(Array.from(newEl.attributes));
+              // console.log(newEl.attributes);
+              // console.log(Array.from(newEl.attributes));
               Array.from(newEl.attributes).forEach(attr =>
-               { console.log(attr)
+               { 
+                // console.log(attr)
                 curEl.setAttribute(attr.name , attr.value)})
             };
           });
