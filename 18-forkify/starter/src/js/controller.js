@@ -11,6 +11,7 @@ import BookmarksView from "./views/bookmarksView.js";
 import AddRecipeView from "./views/addRecipeView.js";
 import addRecipeView from "./views/addRecipeView.js";
 import { MODAL_CLOSE_SEC } from "./config.js";
+import bookmarksView from "./views/bookmarksView.js";
 
 // if(module.hot){
 //   module.hot.accept();
@@ -122,8 +123,14 @@ const controlRecipes = async function(){
     // render recipe.
     recipeView.render(model.state.recipe);
 
-    // Succcess messgae.
+    // Success messgae.
     addRecipeView.renderMessage();
+
+    // Render bookmark view.
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change ID in the URL.
+    window.history.pushState(null, "", `#${model.state.recipe.id}`);
 
     // Close form window.
     setTimeout(() => {
