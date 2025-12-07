@@ -9,10 +9,10 @@ class PaginationView extends View {
             const btn = e.target.closest(".btn--inline");
 
             if(!btn) return;
-            console.log(btn);
+            // console.log(btn);
 
             const gotoPage = +btn.dataset.goto;
-            console.log(gotoPage);
+            // console.log(gotoPage);
 
             handler(gotoPage);
         })
@@ -21,19 +21,30 @@ class PaginationView extends View {
     _generateMarkup(){
         const curPage = this._data.page;
         const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
-        console.log(curPage);
-        console.log(numPages);
-       
+        // console.log(curPage);
+        // console.log(numPages);
+        const totalResults = this._data.results.length
+        // console.log(this._data.results.length);
+
 
         // Page 1 and there are other pages
         if(curPage === 1 && numPages > 1){
             return `
+          <button class="btn--def">
+          <span>Page 1</span>
+          </button>
+          
+            <button class="btn--def">
+          <span>${numPages} Pages & ${totalResults} Results</span>
+          </button>
+
             <button data-goto="${curPage + 1}" class="btn--inline pagination__btn--next">
             <span>Page ${curPage + 1}</span>
             <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
             </svg>
             </button>
+
           `;
         }
         
@@ -46,6 +57,14 @@ class PaginationView extends View {
             </svg>
             <span>Page ${curPage - 1}</span>
             </button>
+
+            <button class="btn--def">
+            <span>${numPages} Pages & ${totalResults} Results</span>
+            </button>
+
+            <button class="btn--def">
+            <span>Page ${numPages}</span>
+            </button>
             `;
         }
         
@@ -57,6 +76,11 @@ class PaginationView extends View {
             </svg>
             <span>Page ${curPage - 1}</span>
           </button>
+
+              <button class="btn--def">
+              <span>${numPages} Pages & ${totalResults} Results</span>
+              </button>
+
           <button data-goto="${curPage + 1}" class="btn--inline pagination__btn--next">
             <span>Page ${curPage + 1}</span>
             <svg class="search__icon">

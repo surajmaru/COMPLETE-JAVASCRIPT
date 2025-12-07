@@ -69,7 +69,7 @@ const controlRecipes = async function(){
     // 4: render initial pagination buttons
     paginationView.render(model.state.search);
     } catch(err){
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -118,7 +118,7 @@ const controlRecipes = async function(){
 
     // console.log(newRecipe);
     await  model.uploadRecipe(newRecipe);
-    console.log(model.state.recipe);
+    // console.log(model.state.recipe);
 
     // render recipe.
     recipeView.render(model.state.recipe);
@@ -152,6 +152,7 @@ const controlRecipes = async function(){
     searchView.addHandlerSearch(controlSearchResults);
     paginationView.addHandlerClick(controlPagination);
     addRecipeView.addHAndlerUpload(controlAddRecipe);
+    addRecipeView.formCheck();
   };
 init();
 

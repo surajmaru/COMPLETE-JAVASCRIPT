@@ -17,9 +17,9 @@ class RecipeView extends View {
       this._parentElement.addEventListener("click", function(e){
         const btn = e.target.closest(".btn--update-servings");
         if(!btn) return;
-        console.log(btn);
+        // console.log(btn);
         const { updateTo } = btn.dataset;
-        console.log(+updateTo);
+        // console.log(+updateTo);
         if(+updateTo > 0 )
         handler(+updateTo);
       })
@@ -37,7 +37,7 @@ class RecipeView extends View {
         // console.log(this._data);
         return `
         <figure class="recipe__fig">
-          <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
+          <img src="${this._data.image}" alt="" class="recipe__img" />
           <h1 class="recipe__title">
             <span>${this._data.title}</span>
           </h1>
